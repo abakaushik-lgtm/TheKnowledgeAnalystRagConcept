@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Legal Knowledge Analyst — Retrieval-Augmented Generation (RAG) System</title>
+  
+  <!-- Main Glassmorphic Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Premium Application Header -->
+  <header>
+    <div class="brand-wrapper">
+      <div class="logo-badge">⚖️</div>
+      <div>
+        <h1>AI Legal Knowledge Analyst</h1>
+        <p style="font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase;">Retrieval-Augmented Generation Workflow</p>
+      </div>
+    </div>
+    
+    <div class="header-status">
+      <div class="pulse-dot"></div>
+      <span>RAG Guardrails: Active (Strict Rule Compliance)</span>
+    </div>
+  </header>
+
+  <!-- Main Multi-Column Workspace Grid -->
+  <main class="app-container">
+
+    <!-- COLUMN 1: ACTIVE DOCUMENT HUB -->
+    <section class="section-panel" aria-labelledby="doc-hub-title">
+      <div class="panel-header">
+        <h2 id="doc-hub-title">📂 Document Ingestion</h2>
+      </div>
+      
+      <div class="panel-content doc-hub-content">
+        <!-- Interactive Drag & Drop / Click Uploader -->
+        <label class="uploader-card" id="drop-zone">
+          <span style="font-size: 2rem;">📤</span>
+          <h3 style="font-size: 0.9rem; margin-top: 0.5rem; font-weight: 600;">Ingest Local Contract</h3>
+          <p>Upload TXT / legal source file</p>
+          <input type="file" id="file-input" accept=".txt">
+        </label>
+        
+        <div class="divider">Preloaded Contract Core</div>
+        
+        <!-- Preloaded Contracts Selector List -->
+        <div class="doc-list" id="preloaded-doc-list">
+          <!-- Documents populated dynamically from documents.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMN 2: ANALYST PIPELINE DASHBOARD -->
+    <section class="section-panel" aria-labelledby="dashboard-title" style="display: flex; flex-direction: column;">
+      <!-- Active Document Identification Summary Header -->
+      <div style="padding: 1.25rem 1.25rem 0.75rem 1.25rem; background: rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-glass);">
+        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-primary); font-weight: 600; letter-spacing: 0.5px;">Active Contract Context</span>
+        <h2 id="active-document-title" style="font-size: 1.2rem; font-weight: 700; margin-top: 0.15rem; color: white;">SaaS Master Services Agreement (MSA)</h2>
+      </div>
+
+      <!-- Pipeline Step Tabs Menu -->
+      <nav class="pipeline-tabs" aria-label="Pipeline Steps">
+        <button class="tab-btn active" onclick="switchTab('classification')">Step 1: Classify</button>
+        <button class="tab-btn" onclick="switchTab('summary')">Step 2: Summary</button>
+        <button class="tab-btn" onclick="switchTab('risks')">Step 3: Risks</button>
+        <button class="tab-btn" onclick="switchTab('dates')">Step 4: Dates</button>
+        <button class="tab-btn" onclick="switchTab('stakeholders')">Step 5: Parties</button>
+        <button class="tab-btn" onclick="switchTab('viewer')">Document Viewer</button>
+      </nav>
+
+      <div class="panel-content" style="flex: 1;">
+        <!-- STEP 1: CLASSIFICATION TAB -->
+        <div id="step-classification" class="pipeline-step-content active">
+          <div class="classification-grid" id="classification-grid">
+            <!-- Dynamic Classification Cards -->
+          </div>
+        </div>
+
+        <!-- STEP 2: EXECUTIVE SUMMARY TAB -->
+        <div id="step-summary" class="pipeline-step-content">
+          <div class="summary-container" id="summary-bullets-container">
+            <!-- Dynamic Summary Bullets -->
+          </div>
+        </div>
+
+        <!-- STEP 3: RISK EXTRACTION DASHBOARD TAB -->
+        <div id="step-risks" class="pipeline-step-content">
+          <div class="risks-table-wrapper">
+            <table class="risks-table">
+              <thead>
+                <tr>
+                  <th>Risk Type</th>
+                  <th>Description</th>
+                  <th>Severity</th>
+                  <th>Citation</th>
+                </tr>
+              </thead>
+              <tbody id="risks-table-body">
+                <!-- Dynamic Risk Rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- STEP 4: IMPORTANT DATES EXTRACTION TAB -->
+        <div id="step-dates" class="pipeline-step-content">
+          <div class="timeline" id="timeline-container">
+            <!-- Dynamic Milestones Timeline Nodes -->
+          </div>
+        </div>
+
+        <!-- STEP 5: STAKEHOLDER EXTRACTION TAB -->
+        <div id="step-stakeholders" class="pipeline-step-content">
+          <div class="stakeholders-grid" id="stakeholders-grid">
+            <!-- Dynamic Stakeholder Profile Cards -->
+          </div>
+        </div>
+
+        <!-- STEP 6: DYNAMIC DOCUMENT VIEWER TAB -->
+        <div id="step-viewer" class="pipeline-step-content">
+          <div class="doc-viewer-container">
+            <div class="viewer-header">
+              <span id="viewer-doc-title">SaaS Master Services Agreement (MSA)</span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem;" id="viewer-chunk-count">20 Chunks Loaded</span>
+            </div>
+            <div class="viewer-body" id="document-viewer-body">
+              <!-- Full Chunks of Document Text Rendered Here with Section and Page Markers -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMN 3: STRICT RAG QA CHAT CONSOLE -->
+    <section class="section-panel qa-panel" aria-labelledby="qa-title">
+      <div class="panel-header">
+        <h2 id="qa-title">💬 Question Answering Mode</h2>
+        <button class="tab-btn" style="padding: 0.35rem 0.75rem; font-size: 0.75rem; flex: none;" onclick="clearChat()">Clear Chat</button>
+      </div>
+
+      <!-- Compliance alert bar -->
+      <div class="chat-banner">
+        <span>🛡️</span>
+        <span>Strict Context Bounds: External legal facts are disabled. Answers draw exclusively from matched references.</span>
+      </div>
+
+      <!-- Conversation Feed -->
+      <div class="chat-feed" id="chat-feed">
+        <!-- Interactive messages rendered here -->
+      </div>
+
+      <!-- Quick Suggested Query Chips based on Document Context -->
+      <div class="query-chips-container">
+        <div class="chips-title">Recommended Analyst Inquiries</div>
+        <div class="chips-wrapper" id="query-chips-wrapper">
+          <!-- Populated Dynamically -->
+        </div>
+      </div>
+
+      <!-- Chat input fields -->
+      <form class="chat-input-bar" id="chat-form" onsubmit="handleChatSubmit(event)">
+        <input type="text" id="chat-input" placeholder="Query active contract using RAG parameters..." autocomplete="off">
+        <button type="submit" class="send-btn">Ask</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- SLIDER DRAWERS: RAG CONTEXT INSPECTOR DRAWER -->
+  <aside class="rag-inspector-drawer" id="rag-inspector" aria-label="RAG Retrieval Context Inspector">
+    <div class="inspector-header">
+      <h3>🔍 RAG Retrieval Drawer</h3>
+      <button class="inspector-close" onclick="closeRAGInspector()" aria-label="Close Inspector">&times;</button>
+    </div>
+    
+    <div class="inspector-body">
+      <p class="inspector-intro">Below are the top-scoring indexed text chunks retrieved from the document database and fed into the QA context window. Scoring uses real-time local TF-IDF calculations.</p>
+      <div id="inspector-chunks-container">
+        <!-- Retrieved chunks filled dynamically -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- DATA & UTILITY ENGINE SCRIPTS -->
+  <script src="documents.js"></script>
+  <script src="rag-engine.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
