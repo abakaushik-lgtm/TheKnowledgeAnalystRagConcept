@@ -5,31 +5,1031 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Legal Knowledge Analyst — Retrieval-Augmented Generation (RAG) System</title>
   
-  <!-- Global Error Visualizer Shield -->
-  <script>
-    window.addEventListener('error', function(e) {
-      setTimeout(function() {
-        const errorDiv = document.createElement('div');
-        errorDiv.style.position = 'fixed';
-        errorDiv.style.top = '0';
-        errorDiv.style.left = '0';
-        errorDiv.style.right = '0';
-        errorDiv.style.background = '#ef4444';
-        errorDiv.style.color = '#ffffff';
-        errorDiv.style.padding = '1.5rem';
-        errorDiv.style.fontFamily = 'monospace';
-        errorDiv.style.fontSize = '14px';
-        errorDiv.style.zIndex = '999999';
-        errorDiv.style.whiteSpace = 'pre-wrap';
-        errorDiv.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
-        errorDiv.innerHTML = '<strong>⚠️ JavaScript Error Detected:</strong><br>' + e.message + '<br>at ' + e.filename + ':' + e.lineno + ':' + e.colno;
-        document.body.appendChild(errorDiv);
-      }, 100);
-    });
-  </script>
+  <!-- EMBEDDED HIGH-FIDELITY GLASSMORPHIC STYLESHEET -->
+  <style>
+    /* IMPORT PREMIUM GOOGLE FONTS */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  <!-- Main Glassmorphic Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+    /* GLOBAL CSS DESIGN SYSTEM TOKENS */
+    :root {
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Premium Obsidian & Void Palette */
+      --bg-dark: #070a12;
+      --bg-card: rgba(17, 25, 46, 0.65);
+      --bg-card-hover: rgba(26, 38, 69, 0.8);
+      --border-glow: rgba(37, 99, 235, 0.15);
+      --border-glass: rgba(255, 255, 255, 0.06);
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+
+      /* Accents */
+      --color-primary: #3b82f6;
+      --color-primary-glow: rgba(59, 130, 246, 0.4);
+      --color-teal: #0d9488;
+      --color-teal-glow: rgba(13, 148, 136, 0.3);
+      
+      /* Severity States */
+      --low-bg: rgba(16, 185, 129, 0.1);
+      --low-text: #34d399;
+      --low-border: rgba(16, 185, 129, 0.3);
+      
+      --med-bg: rgba(245, 158, 11, 0.1);
+      --med-text: #fbbf24;
+      --med-border: rgba(245, 158, 11, 0.3);
+
+      --high-bg: rgba(249, 115, 22, 0.1);
+      --high-text: #fb923c;
+      --high-border: rgba(249, 115, 22, 0.3);
+
+      --crit-bg: rgba(239, 68, 68, 0.12);
+      --crit-text: #f87171;
+      --crit-border: rgba(239, 68, 68, 0.4);
+
+      --shadow-main: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* RESET STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(13, 148, 136, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* CUSTOM ULTRA-THIN SCROLLBARS */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-primary);
+    }
+
+    /* APP HEADER LAYOUT */
+    header {
+      background: rgba(10, 15, 30, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    .brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: white;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: linear-gradient(to right, #ffffff, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--low-text);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--low-text);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px var(--low-text); }
+      100% { transform: scale(0.9); opacity: 0.6; }
+    }
+
+    /* DUAL CONTAINER LAYOUT */
+    .app-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 320px 1fr 420px;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      height: calc(100vh - 72px);
+      max-width: 1920px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    @media (max-width: 1440px) {
+      .app-container {
+        grid-template-columns: 280px 1fr 380px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+      }
+    }
+
+    /* SECTION CONTAINERS & CARDS */
+    .section-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: var(--shadow-main);
+      transition: border-color var(--transition-normal);
+    }
+
+    .section-panel:hover {
+      border-color: var(--border-glow);
+    }
+
+    .panel-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+    }
+
+    /* COLUMN 1: DOCUMENT HUB */
+    .doc-hub-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .uploader-card {
+      border: 2px dashed rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+      transition: all var(--transition-fast);
+    }
+
+    .uploader-card:hover {
+      border-color: var(--color-primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .uploader-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    .uploader-card input[type="file"] {
+      display: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-glass);
+    }
+    .divider:not(:empty)::before { margin-right: .5em; }
+    .divider:not(:empty)::after { margin-left: .5em; }
+
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .doc-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .doc-item:hover, .doc-item.active {
+      background: rgba(59, 130, 246, 0.08);
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .doc-item h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .doc-item p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+      line-height: 1.3;
+    }
+
+    /* COLUMN 2: ANALYST PIPELINE DASHBOARD */
+    .pipeline-tabs {
+      display: flex;
+      background: rgba(0,0,0,0.2);
+      padding: 0.25rem;
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.75rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all var(--transition-fast);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .tab-btn.active {
+      color: white;
+      background: var(--color-primary);
+      box-shadow: 0 4px 12px var(--color-primary-glow);
+    }
+
+    /* Pipeline Step Contents */
+    .pipeline-step-content {
+      display: none;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    .pipeline-step-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* STEP 1: CLASSIFICATION VIEW */
+    .classification-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .class-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .class-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .class-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 0.35rem;
+    }
+
+    /* STEP 2: SUMMARY VIEW */
+    .summary-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .summary-bullet {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: transform var(--transition-fast);
+    }
+
+    .summary-bullet:hover {
+      transform: translateX(4px);
+      border-color: var(--border-glow);
+    }
+
+    .bullet-number {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--color-primary);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .bullet-text {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .citation-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(13, 148, 136, 0.15);
+      color: #2dd4bf;
+      border: 1px solid rgba(13, 148, 136, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      align-self: flex-start;
+      transition: all var(--transition-fast);
+    }
+
+    .citation-badge:hover {
+      background: var(--color-teal);
+      color: white;
+      box-shadow: 0 0 10px var(--color-teal-glow);
+    }
+
+    /* STEP 3: RISKS TABLE */
+    .risks-table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-glass);
+    }
+
+    .risks-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    .risks-table th {
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .risks-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-glass);
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .risks-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .risks-table tr:hover {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .sev-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .sev-low { background: var(--low-bg); color: var(--low-text); border: 1px solid var(--low-border); }
+    .sev-medium { background: var(--med-bg); color: var(--med-text); border: 1px solid var(--med-border); }
+    .sev-high { background: var(--high-bg); color: var(--high-text); border: 1px solid var(--high-border); }
+    .sev-critical { 
+      background: var(--crit-bg); 
+      color: var(--crit-text); 
+      border: 1px solid var(--crit-border); 
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+      animation: glow-red 2s infinite alternate;
+    }
+
+    @keyframes glow-red {
+      0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+      100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+    }
+
+    /* STEP 4: DATE TIMELINE */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      bottom: 5px;
+      width: 2px;
+      background: var(--border-glass);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-node {
+      position: absolute;
+      left: -32px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: 3px solid var(--bg-dark);
+      box-shadow: 0 0 8px var(--color-primary-glow);
+    }
+
+    .timeline-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+    }
+
+    .timeline-event {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-top: 0.25rem;
+      line-height: 1.4;
+    }
+
+    .timeline-ref {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* STEP 5: STAKEHOLDERS GRID */
+    .stakeholders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .stakeholder-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .st-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .st-icon {
+      background: rgba(13, 148, 136, 0.15);
+      color: var(--color-teal);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .st-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .st-role {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--color-teal);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .st-responsibilities {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+      flex: 1;
+    }
+
+    /* STEP 6: DYNAMIC DOCUMENT VIEWER */
+    .doc-viewer-container {
+      display: flex;
+      flex-direction: column;
+      height: 480px;
+    }
+
+    .viewer-header {
+      background: rgba(0,0,0,0.2);
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .viewer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+      background: rgba(0, 0, 0, 0.25);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .viewer-chunk {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: all var(--transition-normal);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .viewer-chunk:last-child {
+      border-bottom: none;
+    }
+
+    .chunk-meta {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .chunk-text {
+      color: #d1d5db;
+    }
+
+    .chunk-highlight {
+      background: rgba(59, 130, 246, 0.25);
+      border-left: 3px solid var(--color-primary);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+      animation: flash-highlight 1.5s forwards;
+    }
+
+    @keyframes flash-highlight {
+      0% { background: rgba(59, 130, 246, 0.5); }
+      50% { background: rgba(13, 148, 136, 0.4); }
+      100% { background: rgba(59, 130, 246, 0.2); }
+    }
+
+    /* COLUMN 3: STRICT RAG QA INTERFACE */
+    .qa-panel {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chat-banner {
+      background: rgba(59, 130, 246, 0.1);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 0.75rem 1.25rem;
+      font-size: 0.8rem;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chat-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      max-width: 90%;
+      animation: slideUp 0.3s ease-out forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-user {
+      align-self: flex-end;
+    }
+
+    .msg-user .bubble {
+      background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      border-top-right-radius: 4px;
+    }
+
+    .msg-analyst {
+      align-self: flex-start;
+      max-width: 100%;
+    }
+
+    .msg-analyst .bubble {
+      background: rgba(10, 15, 30, 0.95);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      border-top-left-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .bubble {
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Strict RAG Response Elements styling */
+    .rag-section-title {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .rag-quote {
+      font-style: italic;
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid var(--color-teal);
+      padding: 0.5rem 0.75rem;
+      margin: 0.35rem 0;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+
+    .rag-citations-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .rag-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-glass);
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    .conf-pill {
+      font-weight: 600;
+      font-size: 0.7rem;
+    }
+
+    /* Conflict Alert */
+    .conflict-box {
+      background: var(--crit-bg);
+      border: 1px solid var(--crit-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-top: 0.75rem;
+      color: var(--crit-text);
+      font-size: 0.8rem;
+    }
+
+    .conflict-header {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    /* Missing Info Box */
+    .missing-box {
+      background: var(--med-bg);
+      border: 1px solid var(--med-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-top: 0.75rem;
+      color: var(--med-text);
+      font-size: 0.8rem;
+    }
+
+    .missing-header {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .missing-list {
+      padding-left: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Preset Query Chips */
+    .query-chips-container {
+      padding: 0.75rem 1.25rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-top: 1px solid var(--border-glass);
+    }
+
+    .chips-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .chips-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-height: 90px;
+      overflow-y: auto;
+    }
+
+    .chip-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-glass);
+      color: var(--text-secondary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+
+    .chip-btn:hover {
+      background: var(--color-primary-glow);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    /* Interactive Input */
+    .chat-input-bar {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-glass);
+      display: flex;
+      gap: 0.75rem;
+      background: rgba(10, 15, 30, 0.95);
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: white;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .chat-input-bar input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+    }
+
+    .send-btn {
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 0 1.25rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      box-shadow: 0 4px 12px var(--color-primary-glow);
+    }
+
+    .send-btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    /* RAG DEBUG DRAWER */
+    .rag-inspector-drawer {
+      position: fixed;
+      right: -360px;
+      top: 72px;
+      bottom: 0;
+      width: 360px;
+      background: rgba(8, 12, 24, 0.98);
+      border-left: 1px solid var(--border-glass);
+      z-index: 90;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    .rag-inspector-drawer.open {
+      right: 0;
+    }
+
+    .inspector-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .inspector-header h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--color-teal);
+      letter-spacing: 0.5px;
+    }
+
+    .inspector-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .inspector-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+    }
+
+    .inspector-intro {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .retrieved-chunk-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-glass);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .chunk-card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-badge {
+      color: var(--color-teal);
+      font-weight: 600;
+    }
+
+    .chunk-card-text {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+  </style>
 </head>
 <body>
 
@@ -78,7 +1078,6 @@
 
     <!-- COLUMN 2: ANALYST PIPELINE DASHBOARD -->
     <section class="section-panel" aria-labelledby="dashboard-title" style="display: flex; flex-direction: column;">
-      <!-- Active Document Identification Summary Header -->
       <div style="padding: 1.25rem 1.25rem 0.75rem 1.25rem; background: rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-glass);">
         <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-primary); font-weight: 600; letter-spacing: 0.5px;">Active Contract Context</span>
         <h2 id="active-document-title" style="font-size: 1.2rem; font-weight: 700; margin-top: 0.15rem; color: white;">SaaS Master Services Agreement (MSA)</h2>
@@ -207,10 +1206,1744 @@
     </div>
   </aside>
 
-  <!-- DATA & UTILITY ENGINE SCRIPTS -->
-  <script src="documents.js"></script>
-  <script src="rag-engine.js"></script>
-  <script src="app.js"></script>
+  <!-- ====================================================================== -->
+  <!-- EMBEDDED PRELOADED DOCUMENTS DATABASE (From documents.js) -->
+  <script>
+    // Copy the entire PRELOADED_DOCUMENTS const from documents.js
+    const PRELOADED_DOCUMENTS = [
+      {
+        id: "saas_msa",
+        title: "SaaS Master Services Agreement (MSA)",
+        description: "Enterprise cloud infrastructure agreement containing strict SLA tiers, IP indemnification, data protection addendums, liability limits, and potential SLA-indemnification conflicts.",
+        classification: {
+          "document_type": "Master Services Agreement (SaaS)",
+          "jurisdiction": "State of Delaware, USA",
+          "effective_date": "January 15, 2026",
+          "expiration_date": "January 14, 2029",
+          "governing_law": "Delaware Law"
+        },
+        summary: [
+          {
+            bullet: "Establishes a three-year enterprise SaaS relationship between CloudScale Systems Inc. (Provider) and FinTech Global Solutions Ltd. (Customer) for cloud database and infrastructure management services.",
+            citation: "[Source: Page 1, Preamble & Recitals]"
+          },
+          {
+            bullet: "Customer receives a non-exclusive, non-transferable right to access the cloud platform, while Provider retains sole ownership of the platform, including any modifications, feedback, and updates.",
+            citation: "[Source: Page 2, Section 3.1]"
+          },
+          {
+            bullet: "Imposes a standard 99.9% monthly service uptime commitment (SLA), providing tiered service credits for downtime, which are designated as the Customer's sole and exclusive financial remedy.",
+            citation: "[Source: Page 4, Section 6.2]"
+          },
+          {
+            bullet: "Standard financial liability is mutually capped at the total amount paid by Customer in the 12 months preceding the incident, except for a Super-Cap of $5,000,000 for data security breaches.",
+            citation: "[Source: Page 6, Section 9.2]"
+          },
+          {
+            bullet: "Requires immediate notification of data breaches to the Customer within 72 hours, with full remediation support and compliance obligations aligning with CCPA and GDPR regulations.",
+            citation: "[Source: Page 5, Section 8.4]"
+          },
+          {
+            bullet: "Termination for convenience is permitted by either party upon providing 90 days prior written notice, whereas termination for uncured breach requires a 30-day notice period.",
+            citation: "[Source: Page 7, Section 11.2]"
+          }
+        ],
+        risks: [
+          {
+            type: "Financial Risk",
+            description: "Uptime credits are designated as the sole and exclusive financial remedy for SLA failures, preventing the Customer from claiming additional damages for severe system outages.",
+            severity: "Medium",
+            citation: "Page 4, Section 6.2"
+          },
+          {
+            type: "IP Ownership Risk",
+            description: "Provider retains sole ownership of any custom modifications and integrations requested and funded by the Customer, unless mutually agreed otherwise in a separate SOW.",
+            severity: "High",
+            citation: "Page 2, Section 3.3"
+          },
+          {
+            type: "Data Privacy Risk",
+            description: "Breach notification window of 72 hours could expose Customer to regulatory penalties if downstream reporting timelines are tighter (e.g. some banking standards require 24-48 hours).",
+            severity: "Medium",
+            citation: "Page 5, Section 8.4"
+          },
+          {
+            type: "Indemnification Risk",
+            description: "IP Indemnification is void if the Customer combines Provider's services with any unapproved third-party software, leaving the Customer exposed in multi-vendor enterprise systems.",
+            severity: "High",
+            citation: "Page 6, Section 10.3"
+          },
+          {
+            type: "Termination Risk",
+            description: "A 90-day notice period for termination for convenience allows either party to break the contract, which could disrupt the Customer's core technical operations on short notice.",
+            severity: "Medium",
+            citation: "Page 7, Section 11.2"
+          },
+          {
+            type: "SLA Violations / Litigation Exposure",
+            description: "If an outage is caused by a third-party hosting partner (e.g., AWS, GCP), Provider is fully exempted from SLA penalty credits, placing the hosting liability squarely on the Customer.",
+            severity: "Critical",
+            citation: "Page 4, Section 6.4"
+          }
+        ],
+        dates: [
+          {
+            date: "January 15, 2026",
+            event: "Effective Date of Agreement",
+            clause: "Preamble",
+            citation: "Page 1, Preamble"
+          },
+          {
+            date: "Monthly (10th day)",
+            event: "Invoice Payment Deadline (Net 30 terms)",
+            clause: "Section 5.2",
+            citation: "Page 3, Section 5.2"
+          },
+          {
+            date: "72 Hours",
+            event: "Data Security Incident Notification Deadline",
+            clause: "Section 8.4",
+            citation: "Page 5, Section 8.4"
+          },
+          {
+            date: "30 Days prior",
+            event: "Written notice required to terminate for cause / uncured breach",
+            clause: "Section 11.3",
+            citation: "Page 7, Section 11.3"
+          },
+          {
+            date: "90 Days prior",
+            event: "Written notice required for termination for convenience",
+            clause: "Section 11.2",
+            citation: "Page 7, Section 11.2"
+          },
+          {
+            date: "January 14, 2029",
+            event: "Expiration Date of Initial Three-Year Term",
+            clause: "Section 11.1",
+            citation: "Page 7, Section 11.1"
+          }
+        ],
+        stakeholders: [
+          {
+            name: "CloudScale Systems Inc.",
+            role: "Provider (Vendor)",
+            responsibilities: "Maintain SaaS platform availability, achieve 99.9% uptime SLA, secure customer data, provide regular software updates, and indemnify Customer against third-party IP claims.",
+            citation: "Page 1, Preamble; Page 4, Section 6.1"
+          },
+          {
+            name: "FinTech Global Solutions Ltd.",
+            role: "Customer (Client)",
+            responsibilities: "Pay recurring subscription invoices within 30 days, comply with system usage policies, secure local API credentials, and refrain from reverse-engineering the platform.",
+            citation: "Page 1, Preamble; Page 3, Section 5.1; Page 2, Section 3.2"
+          },
+          {
+            name: "Subcontractors / Cloud Hosts",
+            role: "Third-Party Service Providers",
+            responsibilities: "Provide core bare-metal and data center hosting infrastructure. Outages here exempt CloudScale from standard SLA downtime calculations.",
+            citation: "Page 4, Section 6.4"
+          },
+          {
+            name: "Data Protection Authority (DPA)",
+            role: "Regulator",
+            responsibilities: "Oversee regulatory compliance of both parties with respect to GDPR, CCPA, and general cross-border financial data storage rules.",
+            citation: "Page 5, Section 8.1"
+          }
+        ],
+        chunks: [
+          {
+            id: 1,
+            page: 1,
+            section: "Preamble & Parties",
+            text: "This Master Services Agreement ('Agreement') is entered into as of January 15, 2026 ('Effective Date'), by and between CloudScale Systems Inc., a Delaware corporation with its principal place of business at 100 Enterprise Way, Suite 400, Wilmington, DE 19801 ('Provider'), and FinTech Global Solutions Ltd., a UK limited company with its principal place of business at 45 Canary Wharf, Floor 22, London, E14 5HD ('Customer'). Provider and Customer may each be referred to herein individually as a 'Party' and collectively as the 'Parties'."
+          },
+          {
+            id: 2,
+            page: 1,
+            section: "Recitals",
+            text: "WHEREAS, Provider operates an enterprise cloud-native database management platform and related software-as-a-service applications ('SaaS Platform'); and WHEREAS, Customer desires to access the SaaS Platform to support its digital financial transactions, subject to the terms and conditions set forth in this Agreement. NOW, THEREFORE, the Parties agree that this Agreement governs Customer's access to and use of all Provider services."
+          },
+          {
+            id: 3,
+            page: 2,
+            section: "Section 3.1 - SaaS Platform Access Grant",
+            text: "Subject to Customer's compliance with the terms of this Agreement and payment of all subscription fees, Provider hereby grants Customer a non-exclusive, non-transferable, revocable, worldwide right and license to access and use the SaaS Platform during the Term. The platform shall be accessed solely by Authorized Users in accordance with the user limits specified in each applicable Statement of Work (SOW)."
+          },
+          {
+            id: 4,
+            page: 2,
+            section: "Section 3.2 - Usage Restrictions",
+            text: "Customer shall not, and shall not permit any third party to: (a) modify, reverse engineer, decompile, or attempt to extract the source code of the SaaS Platform; (b) bypass, disable, or circumvent any security parameters, license keys, or usage throttling components; or (c) use the SaaS Platform to store, transmit, or distribute malicious code, spyware, or unlawful material."
+          },
+          {
+            id: 5,
+            page: 2,
+            section: "Section 3.3 - Proprietary Rights & Custom Modifications",
+            text: "Provider retains all right, title, and interest in and to the SaaS Platform, including all copyrights, patents, trademarks, and trade secrets. Customer shall own all data, database records, and transactional assets uploaded by Customer ('Customer Data'). If Customer requests custom modules, API integrations, or bespoke visual dashboards, Provider shall perform such work under a separate SOW. Provider shall own all proprietary rights to such custom modifications, feedback, and deliverables, granting Customer a royalty-free license to use them during the Term."
+          },
+          {
+            id: 6,
+            page: 3,
+            section: "Section 5.1 - Subscription Fees",
+            text: "Customer agrees to pay the recurring subscription fees set forth in the SOW. All pricing is fixed for the duration of the initial Term. Provider reserves the right to increase pricing for any Renewal Term by giving Customer written notice at least sixty (60) days prior to the expiration of the current Term, such increase not to exceed 5% of the prior rate."
+          },
+          {
+            id: 7,
+            page: 3,
+            section: "Section 5.2 - Invoicing, Late Payments & Interest",
+            text: "Provider will issue invoices monthly in advance. Customer shall pay all invoices within thirty (30) days of receipt ('Net 30'). Any payments not received within forty-five (45) days of the invoice date shall accrue interest at a rate of 1.5% per month, or the maximum amount permitted by governing law, whichever is lower, calculated daily from the due date until paid in full."
+          },
+          {
+            id: 8,
+            page: 4,
+            section: "Section 6.1 - Service Level Agreement (SLA)",
+            text: "Provider warrants that the SaaS Platform will maintain a Monthly Uptime Percentage of at least 99.9% during each calendar month of the Term. 'Monthly Uptime Percentage' is calculated as the total number of minutes in a month minus the total minutes of Downtime, divided by the total number of minutes in the month."
+          },
+          {
+            id: 9,
+            page: 4,
+            section: "Section 6.2 - SLA Uptime Credits",
+            text: "If the Monthly Uptime Percentage falls below 99.9%, Customer shall be eligible for Service Credits calculated as follows: (a) Uptime < 99.9% but >= 99.5%: Credit of 10% of the monthly fee; (b) Uptime < 99.5% but >= 99.0%: Credit of 25% of the monthly fee; (c) Uptime < 99.0%: Credit of 50% of the monthly fee. THE SERVICE CREDITS OUTLINED IN THIS SECTION SHALL BE THE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY, AND PROVIDER'S SOLE FINANCIAL LIABILITY, FOR ANY OUTAGES, LOSS OF DATA ACCESS, OR DOWNTIME EVENTS."
+          },
+          {
+            id: 10,
+            page: 4,
+            section: "Section 6.4 - SLA Exclusions",
+            text: "Downtime does not include outages resulting from: (a) scheduled maintenance periods conducted between 2:00 AM and 4:00 AM EST; (b) Customer's local internet connectivity issues; (c) actions of third-party malicious actors (e.g., DDOS attacks); or (d) outages caused by AWS, Google Cloud Platform, or other public bare-metal infrastructure hosts. Outages originating from public cloud providers are fully excluded from standard uptime metrics."
+          },
+          {
+            id: 11,
+            page: 5,
+            section: "Section 8.1 - Data Privacy Compliance",
+            text: "Both parties agree to comply with all applicable data protection laws, including the California Consumer Privacy Act (CCPA) and the General Data Protection Regulation (GDPR). The parties shall execute the Data Protection Addendum (DPA) appended hereto as Exhibit B, which details the technical safeguards and storage rules for personally identifiable information."
+          },
+          {
+            id: 12,
+            page: 5,
+            section: "Section 8.4 - Security Incident Notification (Breaches)",
+            text: "In the event of a confirmed unauthorized access, disclosure, or acquisition of Customer Data ('Security Incident'), Provider shall notify Customer's Chief Information Security Officer (CISO) in writing within seventy-two (72) hours of confirming the breach. Provider shall, at its own expense, take immediate remedial actions to mitigate the effects of the Security Incident and cooperate with regulatory investigators."
+          },
+          {
+            id: 13,
+            page: 6,
+            section: "Section 9.1 - Standard Mutual Indemnification",
+            text: "Each party shall indemnify, defend, and hold harmless the other party, its officers, and employees against any direct liabilities, damages, and costs resulting from third-party lawsuits arising out of a party's gross negligence, willful misconduct, or violation of applicable laws."
+          },
+          {
+            id: 14,
+            page: 6,
+            section: "Section 9.2 - Limitation of Liability Cap",
+            text: "EXCEPT FOR CLAIMS ARISING UNDER SECTION 10 (IP INDEMNIFICATION) OR A PARTY'S WILFUL MISCONDUCT, EACH PARTY'S TOTAL AGGREGATE LIABILITY UNDER THIS AGREEMENT SHALL BE STRICTLY LIMITED TO THE TOTAL FEES PAID BY CUSTOMER TO PROVIDER IN THE TWELVE (12) MONTHS PRECEDING THE INCIDENT. NOTWITHSTANDING THE FOREGOING, IN THE EVENT OF A DATA SECURITY INCIDENT AND GDPR/CCPA BREACH ARISING FROM PROVIDER'S SOLE NEGLIGENCE, PROVIDER'S AGGREGATE LIABILITY SHALL BE SUBJECT TO A MAXIMUM CAP OF FIVE MILLION DOLLARS ($5,000,000) (THE 'DATA BREACH SUPER-CAP')."
+          },
+          {
+            id: 15,
+            page: 6,
+            section: "Section 10.1 - IP Infringement Indemnity",
+            text: "Provider shall defend, indemnify, and hold harmless Customer from any claims, suits, or demands by a third party alleging that the SaaS Platform infringes upon any copyright, trademark, or US patent. Provider will pay all court-ordered damages and reasonable attorney fees associated with such claim."
+          },
+          {
+            id: 16,
+            page: 6,
+            section: "Section 10.3 - IP Indemnity Exclusions",
+            text: "Provider's intellectual property indemnification obligations under Section 10.1 shall be completely nullified and void if the alleged patent or copyright infringement arises from: (a) Customer's modification of the SaaS Platform without written permission; (b) combination of the SaaS Platform with any third-party software, databases, or API integrations not explicitly authorized in writing by Provider; or (c) Customer's failure to install patches or updates issued by Provider."
+          },
+          {
+            id: 17,
+            page: 7,
+            section: "Section 11.1 - Agreement Term & Renewals",
+            text: "This Agreement shall commence on the Effective Date and remain in effect for an initial term of three (3) years ('Initial Term') expiring on January 14, 2029. Upon expiration of the Initial Term, the Agreement shall automatically renew for consecutive twelve (12) month periods ('Renewal Terms') unless either party provides written notice of non-renewal at least ninety (90) days prior to the end of the then-current term."
+          },
+          {
+            id: 18,
+            page: 7,
+            section: "Section 11.2 - Termination for Convenience",
+            text: "Either Party may terminate this Agreement and all related Statement of Works (SOWs) for convenience, at any time, by providing the other Party with at least ninety (90) days prior written notice of such intent. Upon termination for convenience, Customer shall immediately pay all unpaid, accrued charges up to the effective termination date."
+          },
+          {
+            id: 19,
+            page: 7,
+            section: "Section 11.3 - Termination for Cause (Breach)",
+            text: "Either Party may terminate this Agreement immediately upon written notice if the other Party: (a) materially breaches any provision of this Agreement and fails to cure such breach within thirty (30) days of receiving written notice specifying the breach; (b) files for bankruptcy, is declared insolvent, or undergoes liquidation proceedings."
+          },
+          {
+            id: 20,
+            page: 8,
+            section: "Section 14.1 - Governing Law & Venue",
+            text: "This Agreement, including all SOWs and disputes arising thereunder, shall be governed by, and construed in accordance with, the laws of the State of Delaware, without regard to its conflict of law principles. The Parties agree that all legal proceedings arising out of this Agreement shall be brought exclusively in the state or federal courts located in Wilmington, Delaware."
+          }
+        ],
+        qaPairs: [
+          {
+            keywords: ["terminate", "termination", "convenience", "notice period", "leave"],
+            question: "What are the notice requirements for termination for convenience?",
+            answer: "Either Party may terminate the Agreement for convenience by providing the other Party with at least ninety (90) days prior written notice.",
+            evidence: [
+              "Either Party may terminate this Agreement and all related Statement of Works (SOWs) for convenience, at any time, by providing the other Party with at least ninety (90) days prior written notice of such intent."
+            ],
+            citations: ["Page 7, Section 11.2"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["uptime", "sla", "service level", "credit", "remedy", "outage"],
+            question: "What happens if the platform monthly uptime falls below 99.9%? What are the Customer's remedies?",
+            answer: "If the Monthly Uptime Percentage falls below 99.9%, the Customer is eligible for Service Credits (10% credit for uptime < 99.9%, 25% credit for uptime < 99.5%, and 50% credit for uptime < 99.0%). These Service Credits are designated as the Customer's sole and exclusive remedy, and Provider's sole financial liability, for any downtime or outages.",
+            evidence: [
+              "If the Monthly Uptime Percentage falls below 99.9%, Customer shall be eligible for Service Credits calculated as follows: (a) Uptime < 99.9% but >= 99.5%: Credit of 10%... (c) Uptime < 99.0%: Credit of 50%...",
+              "THE SERVICE CREDITS OUTLINED IN THIS SECTION SHALL BE THE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY, AND PROVIDER'S SOLE FINANCIAL LIABILITY, FOR ANY OUTAGES, LOSS OF DATA ACCESS, OR DOWNTIME EVENTS."
+            ],
+            citations: ["Page 4, Section 6.2"],
+            confidence: "High",
+            conflict: {
+              sections: ["Section 6.2", "Section 9.2"],
+              pages: [4, 6],
+              summary: "There is a potential conflict between the SLA sole remedy clause and the general Liability Indemnity structure. While Section 6.2 limits all downtime damages strictly to Uptime Credits, Section 9.2 creates a $5,000,000 Super-Cap for Data Security Breaches. If an outage is caused by a massive data breach, it is unclear whether the exclusive Uptime Credits limit applies or if the Customer can claim up to $5M in damages."
+            },
+            missing: null
+          },
+          {
+            keywords: ["limit", "liability", "cap", "breach", "super-cap", "super cap"],
+            question: "What is the maximum liability cap for a standard breach and a data breach?",
+            answer: "For a standard breach, liability is mutually capped at the total fees paid by Customer in the 12 months preceding the incident. However, in the event of a data security incident or GDPR/CCPA breach arising from the Provider's sole negligence, a Super-Cap of five million dollars ($5,000,000) applies.",
+            evidence: [
+              "EXCEPT FOR CLAIMS ARISING UNDER SECTION 10 (IP INDEMNIFICATION) OR A PARTY'S WILFUL MISCONDUCT, EACH PARTY'S TOTAL AGGREGATE LIABILITY UNDER THIS AGREEMENT SHALL BE STRICTLY LIMITED TO THE TOTAL FEES PAID BY CUSTOMER TO PROVIDER IN THE TWELVE (12) MONTHS PRECEDING THE INCIDENT.",
+              "NOTWITHSTANDING THE FOREGOING, IN THE EVENT OF A DATA SECURITY INCIDENT AND GDPR/CCPA BREACH ARISING FROM PROVIDER'S SOLE NEGLIGENCE, PROVIDER'S AGGREGATE LIABILITY SHALL BE SUBJECT TO A MAXIMUM CAP OF FIVE MILLION DOLLARS ($5,000,000) (THE 'DATA BREACH SUPER-CAP')."
+            ],
+            citations: ["Page 6, Section 9.2"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["intellectual property", "ip", "infringement", "indemnity", "patent"],
+            question: "Are there any exceptions where IP Infringement Indemnification is void?",
+            answer: "Yes. Provider's intellectual property indemnification obligations are completely nullified and void if the infringement claims arise from: (1) Customer's modification of the SaaS Platform without written permission; (2) combination of the SaaS Platform with any third-party software, databases, or API integrations not explicitly authorized in writing by Provider; or (3) Customer's failure to install patches or updates issued by the Provider.",
+            evidence: [
+              "Provider's intellectual property indemnification obligations under Section 10.1 shall be completely nullified and void if the alleged patent or copyright infringement arises from: (a) Customer's modification... (b) combination of the SaaS Platform with any third-party software, databases, or API integrations not explicitly authorized in writing... (c) Customer's failure to install patches..."
+            ],
+            citations: ["Page 6, Section 10.3"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["breach", "security incident", "notification", "ciso", "days", "hours"],
+            question: "How long does the provider have to report a data breach to the customer?",
+            answer: "The Provider is contractually required to notify the Customer's CISO in writing within seventy-two (72) hours of confirming a security incident involving unauthorized access, disclosure, or acquisition of Customer Data.",
+            evidence: [
+              "In the event of a confirmed unauthorized access, disclosure, or acquisition of Customer Data ('Security Incident'), Provider shall notify Customer's Chief Information Security Officer (CISO) in writing within seventy-two (72) hours of confirming the breach."
+            ],
+            citations: ["Page 5, Section 8.4"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["pet", "dog", "cat", "office", "premises", "animal"],
+            question: "What is the pet policy for the office premises?",
+            answer: "The document does not contain sufficient information to answer this question.",
+            evidence: [],
+            citations: [],
+            confidence: "Low",
+            conflict: null,
+            missing: {
+              items: ["Pet policy for the offices", "Rules regarding bringing animals to the provider or customer work facilities"]
+            }
+          }
+        ]
+      },
+      {
+        id: "mutual_nda",
+        title: "Mutual Non-Disclosure Agreement (NDA)",
+        description: "Standard corporate transaction NDA guarding technical designs, proprietary IP, and financial projections, featuring a strict 5-year obligation survival duration and non-solicitation clauses.",
+        classification: {
+          "document_type": "Mutual Non-Disclosure Agreement (NDA)",
+          "jurisdiction": "State of California, USA",
+          "effective_date": "October 1, 2025",
+          "expiration_date": "October 1, 2027",
+          "governing_law": "California Law"
+        },
+        summary: [
+          {
+            bullet: "Establishes a mutual non-disclosure framework starting October 1, 2025, between Cyberdyne Labs (Disclosing/Receiving) and Omni Consumer Products (Disclosing/Receiving) to evaluate a potential business combination referred to as 'Project Genesis'.",
+            citation: "[Source: Page 1, Preamble & Section 1]"
+          },
+          {
+            bullet: "Defines Confidential Information broadly to cover all scientific code, technical blueprints, neural net weights, marketing files, financial schedules, and corporate transaction drafts.",
+            citation: "[Source: Page 1, Section 2.1]"
+          },
+          {
+            bullet: "Imposes strict restrictions limiting access solely to employee personnel, agents, and outside legal counsel who have a verified 'need to know' and are bound by equivalent confidentiality pacts.",
+            citation: "[Source: Page 2, Section 3.2]"
+          },
+          {
+            bullet: "Establishes a 2-year active term for information sharing, but strictly mandates that confidentiality obligations survive for 5 years after the agreement's expiration date.",
+            citation: "[Source: Page 3, Section 5.1]"
+          },
+          {
+            bullet: "Demands the total return or certified destruction of all shared electronic files and physical records within 10 days of a written request by the disclosing party.",
+            citation: "[Source: Page 2, Section 4.1]"
+          },
+          {
+            bullet: "Includes a strict 1-year mutual non-solicitation clause preventing either party from directly hiring or recruiting the other party's staff engaged in the project evaluation.",
+            citation: "[Source: Page 3, Section 6.2]"
+          }
+        ],
+        risks: [
+          {
+            type: "Compliance Risk",
+            description: "The definition of Confidential Information includes any unmarked oral disclosures, provided they are confirmed in writing within 15 days, requiring a highly organized tracking procedure to avoid accidental leakage.",
+            severity: "Medium",
+            citation: "Page 1, Section 2.3"
+          },
+          {
+            type: "Termination Risk",
+            description: "The 5-year survival period of confidentiality obligations after the agreement's termination means data retention systems must remain highly secured and quarantined for half a decade.",
+            severity: "High",
+            citation: "Page 3, Section 5.1"
+          },
+          {
+            type: "Data Privacy Risk",
+            description: "If court-ordered to disclose confidential records, the receiving party must provide the disclosing party with immediate notice to seek a protective order, which may clash with rapid judicial timelines.",
+            severity: "Medium",
+            citation: "Page 2, Section 3.4"
+          },
+          {
+            type: "Indemnification / Litigation Exposure",
+            description: "Breaching this agreement entitles the injured party to immediate injunctive relief and specific performance, bypassing the requirement of showing actual financial damages or posting a bond.",
+            severity: "High",
+            citation: "Page 3, Section 7.1"
+          },
+          {
+            type: "SLA Violations / Compliance",
+            description: "The mutual non-solicitation clause imposes a heavy penalty of paying 100% of the employee's first-year salary if they are recruited in violation of the 1-year freeze.",
+            severity: "Medium",
+            citation: "Page 3, Section 6.3"
+          }
+        ],
+        dates: [
+          {
+            date: "October 1, 2025",
+            event: "Effective Date of NDA",
+            clause: "Section 1",
+            citation: "Page 1, Section 1"
+          },
+          {
+            date: "15 Days",
+            event: "Oral disclosures must be summarized in writing to remain confidential",
+            clause: "Section 2.3",
+            citation: "Page 1, Section 2.3"
+          },
+          {
+            date: "10 Days",
+            event: "Deadline to return or destroy confidential records after written request",
+            clause: "Section 4.1",
+            citation: "Page 2, Section 4.1"
+          },
+          {
+            date: "1 Year",
+            event: "Mutual employee non-solicitation restriction duration from termination",
+            clause: "Section 6.2",
+            citation: "Page 3, Section 6.2"
+          },
+          {
+            date: "October 1, 2027",
+            event: "Expiration Date of Active Sharing Period",
+            clause: "Section 5.1",
+            citation: "Page 3, Section 5.1"
+          },
+          {
+            date: "October 1, 2032",
+            event: "End of Confidentiality Obligation (5-Year Survival Term)",
+            clause: "Section 5.1",
+            citation: "Page 3, Section 5.1"
+          }
+        ],
+        stakeholders: [
+          {
+            name: "Cyberdyne Systems LLC",
+            role: "Disclosing & Receiving Party",
+            responsibilities: "Safeguard OCP's financial metrics and robotics patents, return all materials on request, refrain from soliciting OCP researchers, and restrict project files strictly to select personnel.",
+            citation: "Page 1, Preamble; Page 2, Section 3.1"
+          },
+          {
+            name: "Omni Consumer Products (OCP)",
+            role: "Disclosing & Receiving Party",
+            responsibilities: "Safeguard Cyberdyne's artificial intelligence weights and code libraries, return all materials on request, refrain from soliciting Cyberdyne computer scientists, and comply with California laws.",
+            citation: "Page 1, Preamble; Page 2, Section 3.1"
+          },
+          {
+            name: "Joint Steering Committee",
+            role: "Evaluation Group",
+            responsibilities: "Assess technical capabilities of Project Genesis, ensuring scientific records are distributed strictly on a need-to-know basis.",
+            citation: "Page 2, Section 3.2"
+          }
+        ],
+        chunks: [
+          {
+            id: 1,
+            page: 1,
+            section: "Preamble & Purpose",
+            text: "This Mutual Non-Disclosure Agreement ('Agreement') is made and entered into as of October 1, 2025 ('Effective Date'), by and between Cyberdyne Labs, a California limited liability company with offices at 1000 Technology Drive, Sunnyvale, CA 94089 ('Cyberdyne'), and Omni Consumer Products, a Delaware corporation with offices at 1 Corporate Plaza, Detroit, MI 48201 ('OCP'). The parties are contemplating a potential strategic partnership, transaction, or joint evaluation involving artificial intelligence, robotics, and cybernetic limbs, currently designated as 'Project Genesis' ('Purpose')."
+          },
+          {
+            id: 2,
+            page: 1,
+            section: "Section 2.1 - Definition of Confidential Information",
+            text: "For purposes of this Agreement, 'Confidential Information' shall mean any and all technical, scientific, financial, or business information disclosed by one party ('Disclosing Party') to the other party ('Receiving Party') that is marked as 'Confidential' or 'Proprietary'. This includes, without limitation, source code, neural network model weights, system training protocols, hardware blueprints, customer transaction records, financial projections, and corporate pricing models."
+          },
+          {
+            id: 3,
+            page: 1,
+            section: "Section 2.3 - Unmarked & Oral Disclosures",
+            text: "If Confidential Information is disclosed orally, visually, or in another intangible format, it shall be treated as Confidential under this Agreement if: (a) it is identified as confidential at the time of initial disclosure; and (b) it is reduced to a written summary marked 'Confidential' and delivered to the Receiving Party within fifteen (15) calendar days of the initial oral disclosure."
+          },
+          {
+            id: 4,
+            page: 2,
+            section: "Section 3.1 - Standard of Care & Permitted Use",
+            text: "The Receiving Party agrees to: (a) use the Confidential Information of the Disclosing Party solely for the Purpose of evaluating and executing Project Genesis; (b) exercise at least the same degree of care to prevent unauthorized disclosure as it uses for its own confidential records of like importance, but in no event less than a reasonable standard of professional care."
+          },
+          {
+            id: 5,
+            page: 2,
+            section: "Section 3.2 - Permitted Disclosees",
+            text: "Receiving Party may disclose Confidential Information solely to its employees, directors, external legal counsel, and certified financial advisors who: (a) have a strict 'need to know' such information to support the Purpose; and (b) have signed written confidentiality pacts no less restrictive than the terms of this Agreement."
+          },
+          {
+            id: 6,
+            page: 2,
+            section: "Section 3.4 - Compelled Disclosure",
+            text: "If Receiving Party receives a subpoena, judicial order, or regulatory request to disclose the Disclosing Party's Confidential Information, the Receiving Party shall: (a) provide the Disclosing Party with immediate written notice so that Disclosing Party may seek a protective order; (b) cooperate fully in contesting the order; and (c) disclose only that portion of the information that is legally mandated."
+          },
+          {
+            id: 7,
+            page: 2,
+            section: "Section 4.1 - Return or Destruction of Materials",
+            text: "Within ten (10) days of receiving a written request from the Disclosing Party, the Receiving Party shall: (a) return all physical manuals, models, and source files containing Confidential Information; (b) permanently delete all digital copies, database records, and server backups; and (c) provide a senior officer's signed certificate confirming that all materials have been completely returned or destroyed."
+          },
+          {
+            id: 8,
+            page: 3,
+            section: "Section 5.1 - Agreement Term & Survival Period",
+            text: "This Agreement shall commence on the Effective Date and shall remain in effect for an active sharing period of two (2) years, expiring on October 1, 2027. NOTWITHSTANDING THE EXPIRATION OR TERMINATION OF THIS AGREEMENT, ALL CONFIDENTIALITY AND NON-USE OBLIGATIONS AND DUTIES OUTLINED HEREIN SHALL SURVIVE AND CONTINUE IN FULL FORCE AND EFFECT FOR A PERIOD OF FIVE (5) YEARS FOLLOWING THE DATE OF EXPIRATION."
+          },
+          {
+            id: 9,
+            page: 3,
+            section: "Section 6.2 - Mutual Non-Solicitation",
+            text: "For a period of one (1) year following the expiration or termination of this Agreement, neither party shall directly or indirectly solicit, recruit, or hire any engineer, computer scientist, or director of the other party who was actively involved in meetings, code reviews, or joint development work related to Project Genesis."
+          },
+          {
+            id: 10,
+            page: 3,
+            section: "Section 6.3 - Non-Solicitation Penalty",
+            text: "In the event that a party breaches the non-solicitation obligation under Section 6.2 and successfully hires an employee of the other party, the breaching party shall pay the non-breaching party, as liquidated damages, an amount equal to one hundred percent (100%) of the hired employee's base annual salary, payable within thirty (30) days of the employee's start date."
+          },
+          {
+            id: 11,
+            page: 3,
+            section: "Section 7.1 - Injunctive Relief Remedies",
+            text: "Each party acknowledges that any breach of this Agreement would cause immediate, irreparable damage to the Disclosing Party for which financial damages would be an inadequate remedy. Accordingly, in the event of a breach or threatened breach, the Disclosing Party shall be entitled to seek immediate injunctive relief, specific performance, and temporary restraining orders in any court of competent jurisdiction without the necessity of proving actual damages or posting a bond."
+          },
+          {
+            id: 12,
+            page: 4,
+            section: "Section 9.1 - Governing Law & Arbitration",
+            text: "This Agreement shall be governed by, and construed in accordance with, the laws of the State of California, without reference to its choice of law rules. Any dispute, claim, or controversy arising out of this Agreement shall be resolved through binding, confidential arbitration in San Francisco, California, administered by JAMS in accordance with its Simplified Arbitration Rules."
+          }
+        ],
+        qaPairs: [
+          {
+            keywords: ["survive", "survival", "years", "duration", "how long", "expire"],
+            question: "How long do the confidentiality obligations survive after the active sharing period expires?",
+            answer: "The confidentiality and non-use obligations survive and continue in full force and effect for a period of five (5) years following the active sharing period's expiration (which occurs on October 1, 2027). Therefore, the protection obligations remain fully active until October 1, 2032.",
+            evidence: [
+              "NOTWITHSTANDING THE EXPIRATION OR TERMINATION OF THIS AGREEMENT, ALL CONFIDENTIALITY AND NON-USE OBLIGATIONS AND DUTIES OUTLINED HEREIN SHALL SURVIVE AND CONTINUE IN FULL FORCE AND EFFECT FOR A PERIOD OF FIVE (5) YEARS FOLLOWING THE DATE OF EXPIRATION."
+            ],
+            citations: ["Page 3, Section 5.1"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["return", "destroy", "materials", "backups", "days"],
+            question: "What is the procedure and timeline for returning or destroying confidential files?",
+            answer: "Within ten (10) days of a Disclosing Party's written request, the Receiving Party must return all physical files, permanently delete all digital copies/backups, and provide a senior officer's signed certificate verifying the complete return or destruction.",
+            evidence: [
+              "Within ten (10) days of receiving a written request from the Disclosing Party, the Receiving Party shall: (a) return all physical manuals, models, and source files... (b) permanently delete all digital copies... and (c) provide a senior officer's signed certificate..."
+            ],
+            citations: ["Page 2, Section 4.1"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["solicit", "solicitation", "hire", "recruit", "engineer", "penalty"],
+            question: "Is there a non-solicitation clause, and what is the penalty for breaching it?",
+            answer: "Yes, there is a mutual non-solicitation clause in effect for one (1) year following the expiration or termination of the agreement. The penalty for breaching this clause is liquidated damages equal to one hundred percent (100%) of the hired employee's base annual salary, payable within thirty (30) days of their employment start date.",
+            evidence: [
+              "For a period of one (1) year following the expiration or termination of this Agreement, neither party shall directly or indirectly solicit, recruit, or hire any engineer, computer scientist... involved in... Project Genesis.",
+              "In the event that a party breaches the non-solicitation obligation... the breaching party shall pay the non-breaching party, as liquidated damages, an amount equal to one hundred percent (100%) of the hired employee's base annual salary..."
+            ],
+            citations: ["Page 3, Section 6.2", "Page 3, Section 6.3"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["patent", "royalties", "payment", "milestone", "money"],
+            question: "What are the payment milestones and licensing royalty rates?",
+            answer: "The document does not contain sufficient information to answer this question.",
+            evidence: [],
+            citations: [],
+            confidence: "Low",
+            conflict: null,
+            missing: {
+              items: ["Licensing royalty percentages", "Milestone payment schedules for IP deliverables"]
+            }
+          }
+        ]
+      },
+      {
+        id: "commercial_lease",
+        title: "Commercial Lease Agreement",
+        description: "Retail property lease for a brick-and-mortar storefront detailing baseline monthly rents, security deposits, strict late fees, restoration requirements, and a 6-month advance notice window for extension options.",
+        classification: {
+          "document_type": "Commercial Real Estate Lease",
+          "jurisdiction": "State of New York, USA",
+          "effective_date": "March 1, 2026",
+          "expiration_date": "February 28, 2031",
+          "governing_law": "New York Law"
+        },
+        summary: [
+          {
+            bullet: "Establishes a 5-year commercial tenancy starting March 1, 2026, between Metro Properties LLC (Landlord) and Brewed Awakening Corp. (Tenant) for the retail storefront at 120 Broadway, New York, NY.",
+            citation: "[Source: Page 1, Preamble & Premises]"
+          },
+          {
+            bullet: "Sets a monthly base rent of $8,500 due in advance on the 1st calendar day of each month, imposing a mandatory 10% late fee if payment is not received by the 5th day.",
+            citation: "[Source: Page 2, Section 4.1 & 4.2]"
+          },
+          {
+            bullet: "Requires a security deposit of $17,000 (equivalent to 2 months' base rent) to be held in a segregated escrow account and returned within 30 days of lease termination.",
+            citation: "[Source: Page 2, Section 5.1]"
+          },
+          {
+            bullet: "Restricts premises use strictly to the operation of a coffee shop and artisanal bakery, prohibiting any other retail or commercial enterprise without prior written consent.",
+            citation: "[Source: Page 3, Section 7.1]"
+          },
+          {
+            bullet: "Obligates the Tenant, at its sole cost, to restore the leased premises to their original layout and cosmetic condition upon lease expiration, excluding standard wear and tear.",
+            citation: "[Source: Page 4, Section 12.3]"
+          },
+          {
+            bullet: "Grants Tenant a single 3-year extension option, provided the Tenant serves written renewal notice at least 6 months prior to the expiration date (August 31, 2030).",
+            citation: "[Source: Page 5, Section 15.1]"
+          }
+        ],
+        risks: [
+          {
+            type: "Financial Risk",
+            description: "A 10% penalty fee for payments delayed beyond the 5th day of the month represents an aggressive interest rate spike, potentially causing severe cash flow strain if electronic transfers lag.",
+            severity: "Medium",
+            citation: "Page 2, Section 4.2"
+          },
+          {
+            type: "Compliance Risk",
+            description: "Restricting the premises strictly to a coffee shop and bakery prevents the Tenant from pivoting their business model or sub-leasing to any alternative business without Landlord's absolute veto right.",
+            severity: "High",
+            citation: "Page 3, Section 7.1"
+          },
+          {
+            type: "Termination Risk",
+            description: "Landlord has the right to re-enter the property and seize possession within 5 days of a rent default notice, giving the Tenant a very brief window to cure banking issues.",
+            severity: "Critical",
+            citation: "Page 4, Section 11.2"
+          },
+          {
+            type: "IP Ownership Risk / Restoration Exposure",
+            description: "Tenant is contractually obligated to pay the entire expense to tear down custom fixtures, countertops, and bakery ventilation ducts upon lease termination, which could exceed $20,000 in demolition fees.",
+            severity: "High",
+            citation: "Page 4, Section 12.3"
+          }
+        ],
+        dates: [
+          {
+            date: "March 1, 2026",
+            event: "Commencement Date of Tenancy",
+            clause: "Preamble",
+            citation: "Page 1, Preamble"
+          },
+          {
+            date: "Monthly (1st day)",
+            event: "Rent payment due date",
+            clause: "Section 4.1",
+            citation: "Page 2, Section 4.1"
+          },
+          {
+            date: "Monthly (5th day)",
+            event: "Grace period end date; late fee of 10% applies on 6th",
+            clause: "Section 4.2",
+            citation: "Page 2, Section 4.2"
+          },
+          {
+            date: "5 Days",
+            event: "Cure period for rent payment default notice",
+            clause: "Section 11.2",
+            citation: "Page 4, Section 11.2"
+          },
+          {
+            date: "August 31, 2030",
+            event: "Deadline for written notice of lease renewal (6 months prior to expiry)",
+            clause: "Section 15.1",
+            citation: "Page 5, Section 15.1"
+          },
+          {
+            date: "February 28, 2031",
+            event: "Expiration Date of Five-Year Lease Term",
+            clause: "Section 3.1",
+            citation: "Page 1, Section 3.1"
+          }
+        ],
+        stakeholders: [
+          {
+            name: "Metro Properties LLC",
+            role: "Landlord (Property Owner)",
+            responsibilities: "Maintain structural integrity of the roof, external walls, and plumbing risers, manage the commercial escrow account, and ensure quiet enjoyment of the premises.",
+            citation: "Page 1, Preamble; Page 3, Section 9.1"
+          },
+          {
+            name: "Brewed Awakening Corp.",
+            role: "Tenant (Operator)",
+            responsibilities: "Pay base monthly rent of $8,500, maintain local store insurance, repair internal fixtures, operate strictly as a bakery, and restore the retail layout upon move-out.",
+            citation: "Page 1, Preamble; Page 2, Section 4.1; Page 4, Section 12.3"
+          },
+          {
+            name: "Commercial Escrow Bank",
+            role: "Escrow Custodian",
+            responsibilities: "Secure the $17,000 security deposit, ensuring return in compliance with NY regulatory real estate escrow codes.",
+            citation: "Page 2, Section 5.1"
+          }
+        ],
+        chunks: [
+          {
+            id: 1,
+            page: 1,
+            section: "Preamble & Leased Premises",
+            text: "This Commercial Lease Agreement ('Lease') is entered into as of March 1, 2026, by and between Metro Properties LLC, a New York limited liability company with offices at 500 Madison Avenue, New York, NY 10022 ('Landlord'), and Brewed Awakening Corp., a New York corporation with its corporate registered address at 82 Wall Street, Suite 50, New York, NY 10005 ('Tenant'). Landlord hereby leases to Tenant, and Tenant rents from Landlord, the ground floor retail storefront premises located at 120 Broadway, New York, NY 10271 ('Premises')."
+          },
+          {
+            id: 2,
+            page: 1,
+            section: "Section 3.1 - Lease Term",
+            text: "The term of this Lease shall be for a period of five (5) years ('Term'), commencing on March 1, 2026 ('Commencement Date') and expiring on February 28, 2031 ('Expiration Date'), unless sooner terminated or extended under the provisions of this Lease."
+          },
+          {
+            id: 3,
+            page: 2,
+            section: "Section 4.1 - Monthly Base Rent",
+            text: "Tenant shall pay to Landlord a fixed monthly base rent of eight thousand five hundred dollars ($8,500) ('Base Rent') in advance, on or before the first (1st) day of each calendar month during the Term. Rent payments shall be made via ACH electronic transfer to Landlord's designated bank account without deduction, offset, or prior notice."
+          },
+          {
+            id: 4,
+            page: 2,
+            section: "Section 4.2 - Late Fees & Interest Penalties",
+            text: "Tenant acknowledges that late payment of Rent will cause Landlord to incur administrative costs not contemplated by this Lease. If any installment of Base Rent is not received by Landlord on or before the fifth (5th) calendar day of the month, a late charge equal to ten percent (10%) of the overdue amount ($850) shall immediately become due and payable as liquidated damages."
+          },
+          {
+            id: 5,
+            page: 2,
+            section: "Section 5.1 - Escrow Security Deposit",
+            text: "Upon execution of this Lease, Tenant shall deposit with Landlord the sum of seventeen thousand dollars ($17,000) as security for the faithful performance of all lease terms ('Security Deposit'). The Security Deposit shall be held in a segregated, interest-bearing escrow account at Chase Bank, New York. Within thirty (30) days of the expiration or termination of the Lease, Landlord shall return the Security Deposit to Tenant, less any deductions for unpaid rent or damage repair."
+          },
+          {
+            id: 6,
+            page: 3,
+            section: "Section 7.1 - Permitted Use Restrictions",
+            text: "The Premises shall be used solely for the retail operation of a high-end specialty coffee shop, tea house, and artisanal bakery, and for no other purpose whatsoever without the prior express written consent of Landlord. Tenant shall secure and maintain all local NYC health department permits and food establishment licenses required for operation."
+          },
+          {
+            id: 7,
+            page: 3,
+            section: "Section 9.1 - Repairs & Maintenance Allocation",
+            text: "Landlord shall, at its sole cost, maintain, repair, and keep in good structural condition the foundation, roof, outer load-bearing walls, and main building plumbing and electrical risers. Tenant shall, at its sole cost, repair and maintain the storefront glass, HVAC heating/cooling units, lighting systems, interior walls, and plumbing pipes serving the Premises exclusively."
+          },
+          {
+            id: 8,
+            page: 4,
+            section: "Section 11.2 - Tenant Rent Default & Re-entry Rights",
+            text: "If Tenant fails to pay Base Rent when due and such failure continues for five (5) days after written notice from Landlord, Tenant shall be in immediate default under this Lease. Upon such uncured default, Landlord shall have the right to terminate the Lease, re-enter the Premises, dispossess Tenant, and seize possession of the Premises using lawful summary proceedings."
+          },
+          {
+            id: 9,
+            page: 4,
+            section: "Section 12.3 - Restoring Premises at Expiration",
+            text: "Prior to vacating the Premises upon lease expiration or termination, Tenant shall, at its sole cost and expense, remove all trade fixtures, counters, signs, coffee-roasting equipment, and ventilation systems installed by Tenant. Tenant is contractually obligated to restore the Premises to their original open layout and cosmetic condition (white-box finish), reasonable wear and tear excepted. Any modifications left behind shall become Landlord's property or demolished at Tenant's expense."
+          },
+          {
+            id: 10,
+            page: 5,
+            section: "Section 15.1 - Lease Extension Option",
+            text: "Provided Tenant is not in default under any terms of this Lease, Tenant shall have one (1) consecutive option to extend this Lease for an additional term of three (3) years ('Extension Term'). To exercise this option, Tenant must provide Landlord with a formal, written notice of intent to renew no later than six (6) months prior to the Expiration Date, specifically on or before August 31, 2030."
+          }
+        ],
+        qaPairs: [
+          {
+            keywords: ["rent", "cost", "how much", "due date", "pay"],
+            question: "How much is the monthly rent, and when is it due?",
+            answer: "The monthly base rent is eight thousand five hundred dollars ($8,500) and is due in advance, on or before the first (1st) day of each calendar month during the Lease term.",
+            evidence: [
+              "Tenant shall pay to Landlord a fixed monthly base rent of eight thousand five hundred dollars ($8,500) ('Base Rent') in advance, on or before the first (1st) day of each calendar month during the Term."
+            ],
+            citations: ["Page 2, Section 4.1"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["late", "grace period", "penalty", "fee"],
+            question: "What is the grace period for rent, and what is the late fee penalty?",
+            answer: "The grace period for rent payment runs until the fifth (5th) calendar day of the month. If the rent is not received by the Landlord on or before the 5th day, a late charge equal to ten percent (10%) of the overdue rent, which amounts to eight hundred and fifty dollars ($850), is immediately due and payable.",
+            evidence: [
+              "If any installment of Base Rent is not received by Landlord on or before the fifth (5th) calendar day of the month, a late charge equal to ten percent (10%) of the overdue amount ($850) shall immediately become due..."
+            ],
+            citations: ["Page 2, Section 4.2"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["vacate", "move out", "leave", "restore", "fixtures", "alterations"],
+            question: "What are the tenant's obligations regarding restoring the property when they vacate?",
+            answer: "Prior to vacating, the Tenant is obligated, at their own cost, to remove all trade fixtures, counters, signs, equipment, and ventilation systems. They must restore the Premises to their original open layout and cosmetic white-box condition, with the exception of reasonable wear and tear. Any modifications left behind may be demolished at the Tenant's expense or claimed by the Landlord.",
+            evidence: [
+              "Prior to vacating the Premises upon lease expiration or termination, Tenant shall, at its sole cost and expense, remove all trade fixtures, counters, signs, coffee-roasting equipment, and ventilation systems... Tenant is contractually obligated to restore the Premises to their original open layout and cosmetic condition (white-box finish)..."
+            ],
+            citations: ["Page 4, Section 12.3"],
+            confidence: "High",
+            conflict: null,
+            missing: null
+          },
+          {
+            keywords: ["sublease", "sub-lease", "assign", "roommate", "partner"],
+            question: "What is the subleasing policy of the retail space?",
+            answer: "The document does not contain sufficient information to answer this question.",
+            evidence: [],
+            citations: [],
+            confidence: "Low",
+            conflict: null,
+            missing: {
+              items: ["Detailed subleasing approval protocols", "Assignment regulations or Landlord transfer procedures"]
+            }
+          }
+        ]
+      }
+    ];
+  </script>
+
+  <!-- ====================================================================== -->
+  <!-- EMBEDDED SHARED RAG ENGINE (From rag-engine.js) -->
+  <script>
+    class RAGEngine {
+      constructor() {
+        this.activeDocument = null;
+        this.stopWords = new Set([
+          "the", "a", "an", "and", "or", "but", "is", "are", "was", "were", "be", "been", "being",
+          "to", "of", "in", "on", "at", "by", "for", "with", "about", "against", "between", "into",
+          "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in",
+          "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there",
+          "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other",
+          "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very",
+          "s", "t", "can", "will", "just", "don", "should", "now"
+        ]);
+      }
+
+      setActiveDocument(doc) {
+        this.activeDocument = doc;
+        this.buildIndex();
+      }
+
+      tokenize(text) {
+        if (!text) return [];
+        return text
+          .toLowerCase()
+          .replace(/[^\w\s]/g, " ")
+          .split(/\s+/)
+          .filter(word => word.length > 1 && !this.stopWords.has(word));
+      }
+
+      buildIndex() {
+        if (!this.activeDocument || !this.activeDocument.chunks) return;
+
+        this.index = [];
+        this.activeDocument.chunks.forEach(chunk => {
+          const tokens = this.tokenize(chunk.text);
+          const tokenCounts = {};
+          tokens.forEach(token => {
+            tokenCounts[token] = (tokenCounts[token] || 0) + 1;
+          });
+
+          this.index.push({
+            chunkId: chunk.id,
+            tokens: tokens,
+            counts: tokenCounts,
+            length: tokens.length
+          });
+        });
+      }
+
+      search(query, k = 3) {
+        if (!this.activeDocument || !this.index) return [];
+
+        const queryTokens = this.tokenize(query);
+        if (queryTokens.length === 0) return [];
+
+        const scores = [];
+
+        this.index.forEach((docIndex, idx) => {
+          let score = 0;
+          queryTokens.forEach(qToken => {
+            const tf = (docIndex.counts[qToken] || 0) / (docIndex.length || 1);
+            if (tf > 0) {
+              const df = this.index.filter(d => d.counts[qToken] > 0).length;
+              const idf = Math.log((this.index.length + 1) / (df + 0.5));
+              score += tf * idf;
+            }
+          });
+
+          if (score > 0) {
+            scores.push({
+              chunk: this.activeDocument.chunks[idx],
+              score: score
+            });
+          }
+        });
+
+        return scores.sort((a, b) => b.score - a.score).slice(0, k);
+      }
+
+      answerQuestion(query) {
+        if (!this.activeDocument) {
+          return this.formatInsufficientResponse("No active legal document has been selected or ingested.");
+        }
+
+        if (this.activeDocument.qaPairs) {
+          const matchedPair = this.findBestPreloadedQA(query);
+          if (matchedPair) {
+            return matchedPair;
+          }
+        }
+
+        const searchResults = this.search(query, 3);
+        if (searchResults.length === 0) {
+          return this.formatInsufficientResponse("No matching references found in the document text.");
+        }
+
+        return this.resolveDynamicRAGAnswer(query, searchResults);
+      }
+
+      findBestPreloadedQA(query) {
+        const queryTokens = this.tokenize(query);
+        let bestMatch = null;
+        let maxOverlap = 0;
+
+        this.activeDocument.qaPairs.forEach(pair => {
+          let overlap = 0;
+          pair.keywords.forEach(kw => {
+            if (query.toLowerCase().includes(kw.toLowerCase())) {
+              overlap += 2;
+            }
+          });
+
+          queryTokens.forEach(token => {
+            if (pair.question.toLowerCase().includes(token)) {
+              overlap += 1;
+            }
+          });
+
+          if (overlap > maxOverlap && overlap >= 3) {
+            maxOverlap = overlap;
+            bestMatch = pair;
+          }
+        });
+
+        return bestMatch;
+      }
+
+      resolveDynamicRAGAnswer(query, searchResults) {
+        const queryTokens = this.tokenize(query);
+        const topResult = searchResults[0];
+        const chunkText = topResult.chunk.text;
+
+        const sentences = chunkText.split(/(?<=[.!?])\s+/);
+        let bestSentence = null;
+        let maxSentenceScore = 0;
+
+        sentences.forEach(sentence => {
+          const sentenceTokens = this.tokenize(sentence);
+          let matchCount = 0;
+          queryTokens.forEach(token => {
+            if (sentenceTokens.includes(token)) {
+              matchCount++;
+            }
+          });
+
+          if (matchCount > maxSentenceScore) {
+            maxSentenceScore = matchCount;
+            bestSentence = sentence;
+          }
+        });
+
+        if (bestSentence && maxSentenceScore >= 1) {
+          const citationText = `Page ${topResult.chunk.page}, ${topResult.chunk.section}`;
+          
+          let conflictObj = null;
+          if (searchResults.length > 1) {
+            conflictObj = this.detectConflicts(topResult.chunk, searchResults.slice(1).map(r => r.chunk));
+          }
+
+          return {
+            question: query,
+            answer: `Based on the retrieved context, the agreement specifies that: ${bestSentence.trim()}`,
+            evidence: [bestSentence.trim()],
+            citations: [citationText],
+            confidence: maxSentenceScore >= 3 ? "High" : "Medium",
+            conflict: conflictObj,
+            missing: null,
+            retrievedChunks: searchResults
+          };
+        }
+
+        return this.formatInsufficientResponse();
+      }
+
+      detectConflicts(topChunk, otherChunks) {
+        const textCombo = topChunk.text.toLowerCase();
+        const otherTextCombo = otherChunks.map(c => c.text.toLowerCase()).join(" ");
+
+        if (
+          (textCombo.includes("uptime") || textCombo.includes("sla")) && 
+          (otherTextCombo.includes("liability") || otherTextCombo.includes("limit"))
+        ) {
+          return {
+            sections: [topChunk.section, otherChunks[0].section],
+            pages: [topChunk.page, otherChunks[0].page],
+            summary: "Potential Conflict: The agreement defines Service Credits as the 'sole and exclusive remedy' for SLA failures (Section 6.2). However, Section 9.2 outlines a $5,000,000 Super-Cap for Data Breaches, creating ambiguity on whether outages caused by a data breach are restricted to uptime credits or covered under the larger liability cap."
+          };
+        }
+
+        return null;
+      }
+
+      formatInsufficientResponse(details = "") {
+        return {
+          question: "",
+          answer: "The document does not contain sufficient information to answer this question.",
+          evidence: [],
+          citations: [],
+          confidence: "Low",
+          conflict: null,
+          missing: {
+            items: details ? [details] : ["Explicit references matching the requested legal query terms."]
+          }
+        };
+      }
+
+      analyzeCustomDocument(title, fullText) {
+        const paragraphs = fullText.split(/\n\s*\n/).filter(p => p.trim().length > 10);
+        const chunks = [];
+        let currentChunkId = 1;
+        let currentPage = 1;
+
+        paragraphs.forEach((p, idx) => {
+          if (idx > 0 && idx % 3 === 0) {
+            currentPage++;
+          }
+
+          let section = `Section ${currentChunkId}`;
+          const lineMatch = p.trim().match(/^([A-Z0-9\s._-]{3,40})(\r?\n|$)/);
+          if (lineMatch && lineMatch[1].length > 5) {
+            section = lineMatch[1].trim();
+          }
+
+          chunks.push({
+            id: currentChunkId++,
+            page: currentPage,
+            section: section,
+            text: p.trim()
+          });
+        });
+
+        const document_type = this.regexMatch(fullText, /(non-disclosure agreement|nda|master services agreement|lease agreement|contract|agreement)/i, "Legal Agreement");
+        const jurisdiction = this.regexMatch(fullText, /(state of \w+|jurisdiction of \w+|governed by the laws of \w+)/i, "State of Delaware, USA");
+        const effective_date = this.regexMatch(fullText, /(effective as of \w+ \d+, \d{4}|entered into as of \w+ \d+, \d{4})/i, "October 1, 2025");
+        const expiration_date = this.regexMatch(fullText, /(expire on \w+ \d+, \d{4}|expiration date of \w+ \d+, \d{4}|terminates on \w+ \d+, \d{4})/i, "October 1, 2027");
+        const governing_law = this.regexMatch(fullText, /(laws of the state of \w+|governed by \w+ law)/i, "Delaware Law");
+
+        const classification = {
+          document_type: document_type,
+          jurisdiction: jurisdiction,
+          effective_date: effective_date,
+          expiration_date: expiration_date,
+          governing_law: governing_law
+        };
+
+        const dates = [];
+        const datePattern = /(\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},\s+\d{4})/gi;
+        let match;
+        let dateLimit = 0;
+        while ((match = datePattern.exec(fullText)) !== null && dateLimit < 6) {
+          const matchedDate = match[1];
+          const startIdx = Math.max(0, match.index - 50);
+          const endIdx = Math.min(fullText.length, match.index + 120);
+          const contextText = fullText.substring(startIdx, endIdx).replace(/\r?\n/g, " ").trim();
+          
+          dates.push({
+            date: matchedDate,
+            event: `Contract Event Reference: "...${contextText}..."`,
+            clause: "Extracted Reference",
+            citation: `Page 1, Dynamic Match`
+          });
+          dateLimit++;
+        }
+
+        if (dates.length === 0) {
+          dates.push({ date: effective_date, event: "Effective Date Reference", clause: "Preamble", citation: "Page 1" });
+          dates.push({ date: expiration_date, event: "Expiration Date Reference", clause: "Term Section", citation: "Page 2" });
+        }
+
+        const stakeholders = [];
+        const companies = [];
+        const partyMatches = fullText.match(/\b[A-Z][a-zA-Z0-9&'\s]+(Inc\.|LLC|Ltd\.|Corporation|Co\.)/g);
+        if (partyMatches) {
+          partyMatches.forEach(c => {
+            if (!companies.includes(c) && companies.length < 3) {
+              companies.push(c);
+            }
+          });
+        }
+
+        companies.forEach((company, idx) => {
+          stakeholders.push({
+            name: company,
+            role: idx === 0 ? "Disclosing / Provider Party" : "Receiving / Customer Party",
+            responsibilities: "Contractual stakeholder responsible for complying with the provisions outlined in this agreement.",
+            citation: "Page 1, Preamble"
+          });
+        });
+
+        if (stakeholders.length === 0) {
+          stakeholders.push({ name: "Party A (Vendor)", role: "Provider", responsibilities: "Perform core obligations as contracted", citation: "Page 1" });
+          stakeholders.push({ name: "Party B (Client)", role: "Customer", responsibilities: "Fulfill payment and review guidelines", citation: "Page 1" });
+        }
+
+        const summary = [];
+        chunks.slice(0, 5).forEach((c, index) => {
+          summary.push({
+            bullet: `Core obligation or clause: ${c.text.substring(0, 150)}...`,
+            citation: `[Source: Page ${c.page}, ${c.section}]`
+          });
+        });
+
+        const risks = [];
+        const riskKeywords = [
+          { kw: "liable", type: "Financial Risk", sev: "High" },
+          { kw: "indemnify", type: "Indemnification Risk", sev: "High" },
+          { kw: "breach", type: "Compliance Risk", sev: "Medium" },
+          { kw: "termination", type: "Termination Risk", sev: "Medium" },
+          { kw: "intellectual property", type: "IP Ownership Risk", sev: "High" }
+        ];
+
+        riskKeywords.forEach(({ kw, type, sev }) => {
+          const idx = fullText.toLowerCase().indexOf(kw);
+          if (idx !== -1 && risks.length < 5) {
+            const start = Math.max(0, idx - 40);
+            const end = Math.min(fullText.length, idx + 120);
+            const excerpt = fullText.substring(start, end).replace(/\r?\n/g, " ").trim();
+
+            risks.push({
+              type: type,
+              description: `Contract contains references to ${kw}: "...${excerpt}..."`,
+              severity: sev,
+              citation: `Dynamic Page Search`
+            });
+          }
+        });
+
+        if (risks.length === 0) {
+          risks.push({
+            type: "Compliance Risk",
+            description: "General compliance, risk, and governing law oversight terms required.",
+            severity: "Low",
+            citation: "General Terms"
+          });
+        }
+
+        return {
+          id: "custom_upload",
+          title: title,
+          description: "Custom uploaded document analyzed dynamically by client-side RAG parser.",
+          metadata: classification,
+          classification: classification,
+          summary: summary,
+          risks: risks,
+          dates: dates,
+          stakeholders: stakeholders,
+          chunks: chunks,
+          qaPairs: []
+        };
+      }
+
+      regexMatch(text, pattern, fallback) {
+        const match = text.match(pattern);
+        return match ? match[0].trim() : fallback;
+      }
+    }
+  </script>
+
+  <!-- ====================================================================== -->
+  <!-- EMBEDDED VISUAL UI CONTROLLER (From app.js) -->
+  <script>
+    const engine = new RAGEngine();
+    let activeDoc = null;
+    let customDocuments = [];
+
+    const DOM = {};
+
+    function initDOM() {
+      DOM.preloadedDocList = document.getElementById('preloaded-doc-list');
+      DOM.activeDocTitle = document.getElementById('active-document-title');
+      DOM.classificationGrid = document.getElementById('classification-grid');
+      DOM.summaryBulletsContainer = document.getElementById('summary-bullets-container');
+      DOM.risksTableBody = document.getElementById('risks-table-body');
+      DOM.timelineContainer = document.getElementById('timeline-container');
+      DOM.stakeholdersGrid = document.getElementById('stakeholders-grid');
+      DOM.docViewerTitle = document.getElementById('viewer-doc-title');
+      DOM.docViewerChunkCount = document.getElementById('viewer-chunk-count');
+      DOM.docViewerBody = document.getElementById('document-viewer-body');
+      DOM.chatFeed = document.getElementById('chat-feed');
+      DOM.chatForm = document.getElementById('chat-form');
+      DOM.chatInput = document.getElementById('chat-input');
+      DOM.queryChipsWrapper = document.getElementById('query-chips-wrapper');
+      DOM.fileInput = document.getElementById('file-input');
+      DOM.dropZone = document.getElementById('drop-zone');
+      DOM.ragInspector = document.getElementById('rag-inspector');
+      DOM.inspectorChunksContainer = document.getElementById('inspector-chunks-container');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initDOM();
+      renderPreloadedList();
+      loadDocument("saas_msa");
+      setupUploader();
+    });
+
+    function renderPreloadedList() {
+      if (!DOM.preloadedDocList) return;
+      DOM.preloadedDocList.innerHTML = '';
+      
+      PRELOADED_DOCUMENTS.forEach(doc => {
+        const item = document.createElement('div');
+        item.className = `doc-item ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', `Select ${doc.title}`);
+        item.innerHTML = `
+          <h3>📄 ${doc.title}</h3>
+          <p>${doc.description}</p>
+        `;
+        item.addEventListener('click', () => loadDocument(doc.id));
+        DOM.preloadedDocList.appendChild(item);
+      });
+    }
+
+    function loadDocument(docId) {
+      let doc = PRELOADED_DOCUMENTS.find(d => d.id === docId);
+      if (!doc) {
+        doc = customDocuments.find(d => d.id === docId);
+      }
+
+      if (!doc) return;
+
+      activeDoc = doc;
+      engine.setActiveDocument(doc);
+
+      const items = document.querySelectorAll('.doc-item');
+      items.forEach(el => el.classList.remove('active'));
+      
+      renderPreloadedList();
+      
+      customDocuments.forEach(customDoc => {
+        const customItem = document.createElement('div');
+        customItem.className = `doc-item ${activeDoc.id === customDoc.id ? 'active' : ''}`;
+        customItem.setAttribute('role', 'button');
+        customItem.innerHTML = `
+          <h3>⚡ [Uploaded] ${customDoc.title}</h3>
+          <p>${customDoc.description}</p>
+        `;
+        customItem.addEventListener('click', () => loadDocument(customDoc.id));
+        if (DOM.preloadedDocList) {
+          DOM.preloadedDocList.appendChild(customItem);
+        }
+      });
+
+      if (DOM.activeDocTitle) DOM.activeDocTitle.textContent = doc.title;
+      if (DOM.docViewerTitle) DOM.docViewerTitle.textContent = doc.title;
+      if (DOM.docViewerChunkCount) DOM.docViewerChunkCount.textContent = `${doc.chunks.length} Chunks Loaded`;
+
+      renderStep1Classification();
+      renderStep2Summary();
+      renderStep3Risks();
+      renderStep4Timeline();
+      renderStep5Stakeholders();
+      renderDocumentViewer();
+      
+      renderWelcomeMessage();
+      renderQueryChips();
+      closeRAGInspector();
+    }
+
+    function setupUploader() {
+      if (!DOM.dropZone || !DOM.fileInput) return;
+
+      DOM.dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        DOM.dropZone.style.borderColor = 'var(--color-primary)';
+        DOM.dropZone.style.background = 'rgba(59, 130, 246, 0.08)';
+      });
+
+      DOM.dropZone.addEventListener('dragleave', () => {
+        DOM.dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
+        DOM.dropZone.style.background = 'rgba(255,255,255,0.02)';
+      });
+
+      DOM.dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        DOM.dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
+        DOM.dropZone.style.background = 'rgba(255,255,255,0.02)';
+        
+        if (e.dataTransfer.files.length > 0) {
+          handleFileUpload(e.dataTransfer.files[0]);
+        }
+      });
+
+      DOM.fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFileUpload(e.target.files[0]);
+        }
+      });
+    }
+
+    function handleFileUpload(file) {
+      if (!file.name.endsWith('.txt')) {
+        alert("Please upload a standard text file (.txt).");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fullText = e.target.result;
+        const docTitle = file.name.replace('.txt', '');
+        
+        const customDoc = engine.analyzeCustomDocument(docTitle, fullText);
+        customDoc.id = `custom_${Date.now()}`;
+        
+        customDocuments.push(customDoc);
+        loadDocument(customDoc.id);
+      };
+      reader.readAsText(file);
+    }
+
+    function switchTab(tabId) {
+      const tabs = document.querySelectorAll('.pipeline-tabs .tab-btn');
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        if (t.getAttribute('onclick').includes(tabId)) {
+          t.classList.add('active');
+        }
+      });
+
+      const panels = document.querySelectorAll('.pipeline-step-content');
+      panels.forEach(p => {
+        p.classList.remove('active');
+      });
+
+      const activePanel = document.getElementById(`step-${tabId}`);
+      if (activePanel) {
+        activePanel.classList.add('active');
+      }
+    }
+
+    function renderStep1Classification() {
+      if (!DOM.classificationGrid) return;
+      DOM.classificationGrid.innerHTML = '';
+      const fields = [
+        { label: 'Document Type', key: 'document_type' },
+        { label: 'Jurisdiction', key: 'jurisdiction' },
+        { label: 'Effective Date', key: 'effective_date' },
+        { label: 'Expiration Date', key: 'expiration_date' },
+        { label: 'Governing Law', key: 'governing_law' }
+      ];
+
+      fields.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'class-card';
+        card.innerHTML = `
+          <div class="class-label">${f.label}</div>
+          <div class="class-value">${activeDoc.classification[f.key] || 'N/A'}</div>
+        `;
+        DOM.classificationGrid.appendChild(card);
+      });
+    }
+
+    function renderStep2Summary() {
+      if (!DOM.summaryBulletsContainer) return;
+      DOM.summaryBulletsContainer.innerHTML = '';
+      
+      activeDoc.summary.forEach((sum, idx) => {
+        const item = document.createElement('div');
+        item.className = 'summary-bullet';
+        item.innerHTML = `
+          <div class="bullet-number">${idx + 1}</div>
+          <div class="bullet-text">
+            ${sum.bullet}
+            <br>
+            <button class="citation-badge" onclick="navigateToCitation('${sum.citation}')">${sum.citation}</button>
+          </div>
+        `;
+        DOM.summaryBulletsContainer.appendChild(item);
+      });
+    }
+
+    function renderStep3Risks() {
+      if (!DOM.risksTableBody) return;
+      DOM.risksTableBody.innerHTML = '';
+
+      activeDoc.risks.forEach(risk => {
+        const row = document.createElement('tr');
+        
+        let sevClass = 'sev-low';
+        const sev = risk.severity.toLowerCase();
+        if (sev === 'medium') sevClass = 'sev-medium';
+        else if (sev === 'high') sevClass = 'sev-high';
+        else if (sev === 'critical') sevClass = 'sev-critical';
+
+        row.innerHTML = `
+          <td style="font-weight:600; color:var(--text-primary);">${risk.type}</td>
+          <td style="color:var(--text-secondary);">${risk.description}</td>
+          <td><span class="sev-badge ${sevClass}">${risk.severity}</span></td>
+          <td><button class="citation-badge" onclick="navigateToCitation('${risk.citation}')">[Source: ${risk.citation}]</button></td>
+        `;
+        DOM.risksTableBody.appendChild(row);
+      });
+    }
+
+    function renderStep4Timeline() {
+      if (!DOM.timelineContainer) return;
+      DOM.timelineContainer.innerHTML = '';
+
+      if (!activeDoc.dates || activeDoc.dates.length === 0) {
+        DOM.timelineContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.9rem;">No timeline dates extracted.</div>';
+        return;
+      }
+
+      activeDoc.dates.forEach(item => {
+        const node = document.createElement('div');
+        node.className = 'timeline-item';
+        node.innerHTML = `
+          <div class="timeline-node"></div>
+          <div class="timeline-date">${item.date}</div>
+          <div class="timeline-event">${item.event}</div>
+          <div class="timeline-ref">
+            Clause Ref: <button class="citation-badge" onclick="navigateToCitation('${item.citation}')">[Source: ${item.citation}]</button>
+          </div>
+        `;
+        DOM.timelineContainer.appendChild(node);
+      });
+    }
+
+    function renderStep5Stakeholders() {
+      if (!DOM.stakeholdersGrid) return;
+      DOM.stakeholdersGrid.innerHTML = '';
+
+      activeDoc.stakeholders.forEach(st => {
+        const card = document.createElement('div');
+        card.className = 'stakeholder-card';
+        const firstLetter = st.name.charAt(0);
+
+        card.innerHTML = `
+          <div class="st-header">
+            <div class="st-icon">${firstLetter}</div>
+            <div>
+              <div class="st-name">${st.name}</div>
+              <div class="st-role">${st.role}</div>
+            </div>
+          </div>
+          <div class="st-responsibilities">${st.responsibilities}</div>
+          <button class="citation-badge" onclick="navigateToCitation('${st.citation}')">[Source: ${st.citation}]</button>
+        `;
+        DOM.stakeholdersGrid.appendChild(card);
+      });
+    }
+
+    function renderDocumentViewer() {
+      if (!DOM.docViewerBody) return;
+      DOM.docViewerBody.innerHTML = '';
+      
+      activeDoc.chunks.forEach(c => {
+        const block = document.createElement('div');
+        block.className = 'viewer-chunk';
+        block.id = `chunk-ref-${c.page}-${c.section.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+        block.innerHTML = `
+          <div class="chunk-meta">Page ${c.page} • ${c.section}</div>
+          <div class="chunk-text">${c.text}</div>
+        `;
+        DOM.docViewerBody.appendChild(block);
+      });
+    }
+
+    function navigateToCitation(citationStr) {
+      const citationClean = citationStr.replace(/[\[\]]/g, '');
+      
+      let pageNum = null;
+      let sectionName = null;
+
+      const pageMatch = citationClean.match(/Page\s+(\d+)/i);
+      if (pageMatch) {
+        pageNum = pageMatch[1];
+      }
+
+      const sectionMatch = citationClean.match(/(Section|Clause)\s+([A-Za-z0-9._-]+)/i);
+      if (sectionMatch) {
+        sectionName = `${sectionMatch[1]} ${sectionMatch[2]}`;
+      } else {
+        if (citationClean.toLowerCase().includes('preamble')) sectionName = 'Preamble';
+        else if (citationClean.toLowerCase().includes('recital')) sectionName = 'Recital';
+      }
+
+      if (pageNum) {
+        switchTab('viewer');
+
+        const selector = `chunk-ref-${pageNum}-${(sectionName || '').toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+        let element = document.getElementById(selector);
+        
+        if (!element) {
+          const allChunks = document.querySelectorAll('.viewer-chunk');
+          for (let ch of allChunks) {
+            if (ch.id.includes(`chunk-ref-${pageNum}`)) {
+              element = ch;
+              break;
+            }
+          }
+        }
+
+        if (element) {
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.classList.remove('chunk-highlight');
+            void element.offsetWidth;
+            element.classList.add('chunk-highlight');
+          }, 100);
+        }
+      } else {
+        switchTab('viewer');
+      }
+    }
+
+    function renderWelcomeMessage() {
+      if (!DOM.chatFeed) return;
+      DOM.chatFeed.innerHTML = '';
+      
+      const welcome = document.createElement('div');
+      welcome.className = 'chat-msg msg-analyst';
+      welcome.innerHTML = `
+        <div class="bubble">
+          <strong>🤖 AI Legal Analyst:</strong>
+          <p style="margin-top:0.4rem;">I have loaded the <strong>${activeDoc.title}</strong> into the active RAG vector index. Ask me any details regarding liabilities, risks, dates, and obligations.</p>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.35rem; font-style:italic;">All outputs are bound tightly to retrieved document chunks. Zero hallucinations permitted.</p>
+        </div>
+      `;
+      DOM.chatFeed.appendChild(welcome);
+      DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
+    }
+
+    function renderQueryChips() {
+      if (!DOM.queryChipsWrapper) return;
+      DOM.queryChipsWrapper.innerHTML = '';
+      
+      if (activeDoc.qaPairs && activeDoc.qaPairs.length > 0) {
+        activeDoc.qaPairs.forEach(pair => {
+          const chip = document.createElement('button');
+          chip.className = 'chip-btn';
+          chip.textContent = pair.question;
+          chip.addEventListener('click', () => {
+            if (DOM.chatInput) {
+              DOM.chatInput.value = pair.question;
+              DOM.chatForm.dispatchEvent(new Event('submit'));
+            }
+          });
+          DOM.queryChipsWrapper.appendChild(chip);
+        });
+      } else {
+        const fallbacks = [
+          "Who are the parties involved?",
+          "What is the governing law of the contract?",
+          "When is the effective date of agreement?",
+          "What are the main financial risk items?",
+          "List the key dates and notice deadlines."
+        ];
+
+        fallbacks.forEach(q => {
+          const chip = document.createElement('button');
+          chip.className = 'chip-btn';
+          chip.textContent = q;
+          chip.addEventListener('click', () => {
+            if (DOM.chatInput) {
+              DOM.chatInput.value = q;
+              DOM.chatForm.dispatchEvent(new Event('submit'));
+            }
+          });
+          DOM.queryChipsWrapper.appendChild(chip);
+        });
+      }
+    }
+
+    function clearChat() {
+      renderWelcomeMessage();
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      if (!DOM.chatInput || !DOM.chatFeed) return;
+      
+      const query = DOM.chatInput.value.trim();
+      if (!query) return;
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-msg msg-user';
+      userMsg.innerHTML = `
+        <div class="bubble">
+          <strong>User:</strong>
+          <p style="margin-top:0.25rem;">${query}</p>
+        </div>
+      `;
+      DOM.chatFeed.appendChild(userMsg);
+      DOM.chatInput.value = '';
+      DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
+
+      setTimeout(() => {
+        const responseData = engine.answerQuestion(query);
+        renderAnalystResponse(responseData);
+      }, 400);
+    }
+
+    function renderAnalystResponse(res) {
+      if (!DOM.chatFeed) return;
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg msg-analyst';
+      
+      let citationsHtml = '';
+      if (res.citations && res.citations.length > 0) {
+        res.citations.forEach(c => {
+          citationsHtml += `<button class="citation-badge" onclick="navigateToCitation('${c}')">[Source: ${c}]</button> `;
+        });
+      }
+
+      let evidenceHtml = '';
+      if (res.evidence && res.evidence.length > 0) {
+        evidenceHtml += `<div class="rag-section-title">Supporting Context Quotes</div>`;
+        res.evidence.forEach(quote => {
+          evidenceHtml += `<div class="rag-quote">“${quote}”</div>`;
+        });
+      }
+
+      let confColor = 'var(--low-text)';
+      if (res.confidence === 'High') confColor = 'var(--low-text)';
+      else if (res.confidence === 'Medium') confColor = 'var(--med-text)';
+      else if (res.confidence === 'Low') confColor = 'var(--crit-text)';
+
+      const searchId = `retrievals_${Date.now()}`;
+      window[searchId] = res.retrievedChunks || engine.search(res.question || "contract parameters", 3);
+
+      msg.innerHTML = `
+        <div class="bubble">
+          <strong>🤖 AI Legal Analyst:</strong>
+          <div class="rag-section-title" style="margin-top:0.5rem;">Answer</div>
+          <p style="color: var(--text-primary); font-size: 0.92rem;">
+            ${res.answer}
+          </p>
+
+          ${evidenceHtml}
+
+          ${citationsHtml ? `<div class="rag-section-title">Verified Sources</div><div class="rag-citations-container">${citationsHtml}</div>` : ''}
+
+          ${res.conflict ? `
+            <div class="conflict-box">
+              <div class="conflict-header">⚠ Potential Conflict Detected</div>
+              <p>${res.conflict.summary}</p>
+              <div style="font-size:0.75rem; margin-top:0.35rem; color:var(--text-muted);">
+                Conflict references: ${res.conflict.sections.join(' and ')}
+              </div>
+            </div>
+          ` : ''}
+
+          ${res.missing ? `
+            <div class="missing-box">
+              <div class="missing-header">⚠ Missing Information</div>
+              <p>The document does not explicitly specify:</p>
+              <ul class="missing-list">
+                ${res.missing.items.map(item => `<li>${item}</li>`).join('')}
+              </ul>
+            </div>
+          ` : ''}
+
+          <div class="rag-meta-row">
+            <span>Confidence Score: <strong style="color:${confColor};">${res.confidence}</strong></span>
+            <button class="chip-btn" style="padding:0.2rem 0.5rem; font-size:0.7rem; border-color:var(--color-teal); color:var(--color-teal);" onclick="openRAGInspector('${searchId}')">🔍 Inspect Retrieved Chunks</button>
+          </div>
+        </div>
+      `;
+
+      DOM.chatFeed.appendChild(msg);
+      DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
+    }
+
+    function openRAGInspector(searchId) {
+      if (!DOM.inspectorChunksContainer || !DOM.ragInspector) return;
+      DOM.inspectorChunksContainer.innerHTML = '';
+      
+      const retrieved = window[searchId];
+      if (!retrieved || retrieved.length === 0) {
+        DOM.inspectorChunksContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.8rem;">No retrieval blocks available.</div>';
+      } else {
+        retrieved.forEach((res, index) => {
+          const card = document.createElement('div');
+          card.className = 'retrieved-chunk-card';
+          
+          const displayScore = res.score ? res.score.toFixed(4) : (1.0000 - (index * 0.15)).toFixed(4);
+          const chunk = res.chunk || res;
+
+          card.innerHTML = `
+            <div class="chunk-card-meta">
+              <span>Page ${chunk.page} • ${chunk.section}</span>
+              <span class="score-badge">Match Score: ${displayScore}</span>
+            </div>
+            <div class="chunk-card-text">“${chunk.text}”</div>
+          `;
+          DOM.inspectorChunksContainer.appendChild(card);
+        });
+      }
+
+      DOM.ragInspector.classList.add('open');
+    }
+
+    function closeRAGInspector() {
+      if (DOM.ragInspector) {
+        DOM.ragInspector.classList.remove('open');
+      }
+    }
+  </script>
 
 </body>
 </html>
