@@ -1,5 +1,7 @@
 # ⚖️ AI Legal Knowledge Analyst — Retrieval-Augmented Generation (RAG) System
 
+![AI Legal Knowledge Analyst Dashboard Mockup](./assets/images/dashboard_mockup.png)
+
 An elite, highly factual, double-pronged legal research and analysis system running entirely client-side. The application features both a visually stunning **Glassmorphic Web Interface (SPA)** and a high-performance **Node.js Command Line Interface (CLI)**. 
 
 Both interfaces share a custom client-side **RAG (Retrieval-Augmented Generation) Search Core** designed to analyze long, complex legal documents (e.g., SaaS MSAs, NDAs, Leases, or uploaded contracts) with zero hallucination tolerance, strict citation controls, and automated compliance auditing.
