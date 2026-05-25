@@ -139,20 +139,29 @@ The real-world scalable workflow utilizes the following components:
 
 ## 🛠️ Technology Stack
 
-- **Core Search Core**: Vanilla JavaScript (`rag-engine.js`)
-  - Clean keyword tokenization & stop-word filtering
-  - Local TF-IDF search indexing & BM25-inspired ranking algorithms
-  - RegEx heuristic metadata classifiers (Document Type, Jurisdiction, Dates, Parties)
-  - Strict validator for RAG Rules (No Hallucination, Exact Quotes, Citations)
-- **Web SPA (Front-end)**: HTML5, CSS3, JavaScript (`index.html`, `style.css`, `app.js`)
-  - Translucent glassmorphism containers (`backdrop-filter: blur()`)
-  - Interactive tabs, chronological deadlines timeline paths, and stakeholder cards
-  - Visual Citations bridge: Clicking citation links automatically redirects the view to the "Document Viewer" tab, scrolls, and triggers a glowing flash highlight (`.chunk-highlight`) on the target passage
-  - RAG Context Drawer: Live vector debugger displaying retrieved chunks and scores
-- **Terminal CLI**: Node.js core modules (`analyst-cli.js`)
-  - Built using standard `fs`, `path`, and `readline` libraries (no npm install required!)
-  - Fully interactive terminal chat loops with ANSI colored console feeds
-  - Automated structured pipeline analysis exports as formatted JSON files
+This project is structured in two layers: our **Local Workspace Prototype Stack** (fully operational in this folder) and the corresponding **Enterprise Production Tech Stack** (modeled by the pipeline topology).
+
+### 1. Local Workspace Prototype Tech Stack
+- **RAG Engine**: Vanilla JavaScript (`rag-engine.js`)
+  - Stop-word tokenization pipelines, BM25-inspired scoring, and local inverted indices.
+  - RegEx heuristic metadata scanners (Document Type, Jurisdiction, Dates, Parties).
+  - Strict guardrails enforcing zero hallucination logic.
+- **Web SPA Interface**: HTML5, Vanilla CSS3 (Glassmorphism), and JavaScript (`index.html`, `style.css`, `app.js`).
+  - Animated step progressors, timeline paths, risk indicators, and click-to-highlight citation bridges.
+  - Context Drawer displaying live vector search results and scores.
+- **Terminal CLI**: Node.js core libraries (`analyst-cli.js`)
+  - Built natively with `fs` and `readline` for high performance with zero external dependency overheads.
+
+### 2. Enterprise Production Tech Stack
+For high-volume, multi-tenant enterprise deployments, the pipeline leverages the following specialized stack:
+- **Programming Environment**: **Python 3.10+** (The industry standard for data science, NLP parsing, and orchestration middleware).
+- **RAG Framework**: **LangChain** (Orchestrates text splitting, connects vector stores, manages system prompt templates, and structures generative chains).
+- **Large Language Model API**: **OpenAI API (GPT-4o / GPT-4)** (Provides deep analytical reasoning, zero-temperature factual extractions, and verification auditing).
+- **Vector Database**: **FAISS (Facebook AI Similarity Search) / ChromaDB** (High-performance local vector indexing for low-latency similarity searches and embeddings queries).
+- **Dashboard Framework**: **Streamlit** (A highly interactive Python GUI dashboard. Enables rapid drag-and-drop contract ingestion, renders risk registers, charts chronological timelines, and hosts chat windows).
+- **Document Ingestion & OCR Parsing**:
+  - **pdfplumber / PyPDF2**: Extracts raw text blocks and metadata grids from digital PDF files.
+  - **Tesseract OCR / pdf2image**: Converts scanned PDF paper agreements or locked images into clean, parseable text before sending to the chunking splitter.
 
 ---
 
