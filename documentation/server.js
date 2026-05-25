@@ -1,8 +1,10 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
-const PORT = 8080;
+const START_PORT = 8080;
+let currentPort = START_PORT;
 
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -14,7 +16,6 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  // Normalize request path
   let filePath = req.url === '/' ? '/index.html' : req.url;
   filePath = path.join(__dirname, decodeURIComponent(filePath));
 
@@ -48,10 +49,37 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+// Port Auto-Recovery & Native Launch logic
+function startServer(port) {
+  server.listen(port);
+}
+
+server.on('listening', () => {
+  const url = `http://localhost:${currentPort}/`;
   console.log(`\n======================================================================`);
   console.log(`⚖️  AI LEGAL RAG WEB APP IS RUNNING SUCCESSFULLY!`);
-  console.log(`👉 Open your browser and navigate to: http://localhost:${PORT}/`);
+  console.log(`👉 Active Server URL: ${url}`);
   console.log(`======================================================================\n`);
+  console.log(`Automatically launching your default web browser now...`);
   console.log(`Press Ctrl+C in this console window to stop the server.`);
+  
+  // Launch Windows default browser natively
+  exec(`start ${url}`, (err) => {
+    if (err) {
+      console.log(`Note: Browser failed to auto-launch. Please manually open: ${url}`);
+    }
+  });
 });
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${currentPort} is currently occupied. Retrying on port ${currentPort + 1}...`);
+    currentPort++;
+    startServer(currentPort);
+  } else {
+    console.error(`Server error occurred: ${err.message}`);
+  }
+});
+
+// Start initialization
+startServer(currentPort);
