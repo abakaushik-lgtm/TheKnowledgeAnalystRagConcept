@@ -3,28 +3,33 @@ const engine = new RAGEngine();
 let activeDoc = null;
 let customDocuments = [];
 
-// DOM Element Selectors
-const preloadedDocList = document.getElementById('preloaded-doc-list');
-const activeDocTitle = document.getElementById('active-document-title');
-const classificationGrid = document.getElementById('classification-grid');
-const summaryBulletsContainer = document.getElementById('summary-bullets-container');
-const risksTableBody = document.getElementById('risks-table-body');
-const timelineContainer = document.getElementById('timeline-container');
-const stakeholdersGrid = document.getElementById('stakeholders-grid');
-const docViewerTitle = document.getElementById('viewer-doc-title');
-const docViewerChunkCount = document.getElementById('viewer-chunk-count');
-const docViewerBody = document.getElementById('document-viewer-body');
-const chatFeed = document.getElementById('chat-feed');
-const chatForm = document.getElementById('chat-form');
-const chatInput = document.getElementById('chat-input');
-const queryChipsWrapper = document.getElementById('query-chips-wrapper');
-const fileInput = document.getElementById('file-input');
-const dropZone = document.getElementById('drop-zone');
-const ragInspector = document.getElementById('rag-inspector');
-const inspectorChunksContainer = document.getElementById('inspector-chunks-container');
+// DOM namespace evaluated after DOM is parsed
+const DOM = {};
+
+function initDOM() {
+  DOM.preloadedDocList = document.getElementById('preloaded-doc-list');
+  DOM.activeDocTitle = document.getElementById('active-document-title');
+  DOM.classificationGrid = document.getElementById('classification-grid');
+  DOM.summaryBulletsContainer = document.getElementById('summary-bullets-container');
+  DOM.risksTableBody = document.getElementById('risks-table-body');
+  DOM.timelineContainer = document.getElementById('timeline-container');
+  DOM.stakeholdersGrid = document.getElementById('stakeholders-grid');
+  DOM.docViewerTitle = document.getElementById('viewer-doc-title');
+  DOM.docViewerChunkCount = document.getElementById('viewer-chunk-count');
+  DOM.docViewerBody = document.getElementById('document-viewer-body');
+  DOM.chatFeed = document.getElementById('chat-feed');
+  DOM.chatForm = document.getElementById('chat-form');
+  DOM.chatInput = document.getElementById('chat-input');
+  DOM.queryChipsWrapper = document.getElementById('query-chips-wrapper');
+  DOM.fileInput = document.getElementById('file-input');
+  DOM.dropZone = document.getElementById('drop-zone');
+  DOM.ragInspector = document.getElementById('rag-inspector');
+  DOM.inspectorChunksContainer = document.getElementById('inspector-chunks-container');
+}
 
 // INITIALIZE APPLICATION
 window.addEventListener('DOMContentLoaded', () => {
+  initDOM();
   renderPreloadedList();
   
   // Set default document (SaaS MSA)
@@ -36,7 +41,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Render the list of preloaded contracts
 function renderPreloadedList() {
-  preloadedDocList.innerHTML = '';
+  if (!DOM.preloadedDocList) return;
+  DOM.preloadedDocList.innerHTML = '';
   
   PRELOADED_DOCUMENTS.forEach(doc => {
     const item = document.createElement('div');
@@ -48,7 +54,7 @@ function renderPreloadedList() {
       <p>${doc.description}</p>
     `;
     item.addEventListener('click', () => loadDocument(doc.id));
-    preloadedDocList.appendChild(item);
+    DOM.preloadedDocList.appendChild(item);
   });
 }
 
@@ -82,13 +88,15 @@ function loadDocument(docId) {
       <p>${customDoc.description}</p>
     `;
     customItem.addEventListener('click', () => loadDocument(customDoc.id));
-    preloadedDocList.appendChild(customItem);
+    if (DOM.preloadedDocList) {
+      DOM.preloadedDocList.appendChild(customItem);
+    }
   });
 
   // Re-render UI panels
-  activeDocTitle.textContent = doc.title;
-  docViewerTitle.textContent = doc.title;
-  docViewerChunkCount.textContent = `${doc.chunks.length} Chunks Loaded`;
+  if (DOM.activeDocTitle) DOM.activeDocTitle.textContent = doc.title;
+  if (DOM.docViewerTitle) DOM.docViewerTitle.textContent = doc.title;
+  if (DOM.docViewerChunkCount) DOM.docViewerChunkCount.textContent = `${doc.chunks.length} Chunks Loaded`;
 
   renderStep1Classification();
   renderStep2Summary();
@@ -107,28 +115,30 @@ function loadDocument(docId) {
 
 // Setup drag and drop / click file uploader
 function setupUploader() {
-  dropZone.addEventListener('dragover', (e) => {
+  if (!DOM.dropZone || !DOM.fileInput) return;
+
+  DOM.dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropZone.style.borderColor = 'var(--color-primary)';
-    dropZone.style.background = 'rgba(59, 130, 246, 0.08)';
+    DOM.dropZone.style.borderColor = 'var(--color-primary)';
+    DOM.dropZone.style.background = 'rgba(59, 130, 246, 0.08)';
   });
 
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
-    dropZone.style.background = 'rgba(255,255,255,0.02)';
+  DOM.dropZone.addEventListener('dragleave', () => {
+    DOM.dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
+    DOM.dropZone.style.background = 'rgba(255,255,255,0.02)';
   });
 
-  dropZone.addEventListener('drop', (e) => {
+  DOM.dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
-    dropZone.style.background = 'rgba(255,255,255,0.02)';
+    DOM.dropZone.style.borderColor = 'rgba(255,255,255,0.08)';
+    DOM.dropZone.style.background = 'rgba(255,255,255,0.02)';
     
     if (e.dataTransfer.files.length > 0) {
       handleFileUpload(e.dataTransfer.files[0]);
     }
   });
 
-  fileInput.addEventListener('change', (e) => {
+  DOM.fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
       handleFileUpload(e.target.files[0]);
     }
@@ -174,12 +184,16 @@ function switchTab(tabId) {
     p.classList.remove('active');
   });
 
-  document.getElementById(`step-${tabId}`).classList.add('active');
+  const activePanel = document.getElementById(`step-${tabId}`);
+  if (activePanel) {
+    activePanel.classList.add('active');
+  }
 }
 
 // RENDER STEP 1: CLASSIFICATION
 function renderStep1Classification() {
-  classificationGrid.innerHTML = '';
+  if (!DOM.classificationGrid) return;
+  DOM.classificationGrid.innerHTML = '';
   const fields = [
     { label: 'Document Type', key: 'document_type' },
     { label: 'Jurisdiction', key: 'jurisdiction' },
@@ -195,13 +209,14 @@ function renderStep1Classification() {
       <div class="class-label">${f.label}</div>
       <div class="class-value">${activeDoc.classification[f.key] || 'N/A'}</div>
     `;
-    classificationGrid.appendChild(card);
+    DOM.classificationGrid.appendChild(card);
   });
 }
 
 // RENDER STEP 2: SUMMARY
 function renderStep2Summary() {
-  summaryBulletsContainer.innerHTML = '';
+  if (!DOM.summaryBulletsContainer) return;
+  DOM.summaryBulletsContainer.innerHTML = '';
   
   activeDoc.summary.forEach((sum, idx) => {
     const item = document.createElement('div');
@@ -214,13 +229,14 @@ function renderStep2Summary() {
         <button class="citation-badge" onclick="navigateToCitation('${sum.citation}')">${sum.citation}</button>
       </div>
     `;
-    summaryBulletsContainer.appendChild(item);
+    DOM.summaryBulletsContainer.appendChild(item);
   });
 }
 
 // RENDER STEP 3: RISKS DASHBOARD
 function renderStep3Risks() {
-  risksTableBody.innerHTML = '';
+  if (!DOM.risksTableBody) return;
+  DOM.risksTableBody.innerHTML = '';
 
   activeDoc.risks.forEach(risk => {
     const row = document.createElement('tr');
@@ -238,16 +254,17 @@ function renderStep3Risks() {
       <td><span class="sev-badge ${sevClass}">${risk.severity}</span></td>
       <td><button class="citation-badge" onclick="navigateToCitation('${risk.citation}')">[Source: ${risk.citation}]</button></td>
     `;
-    risksTableBody.appendChild(row);
+    DOM.risksTableBody.appendChild(row);
   });
 }
 
 // RENDER STEP 4: TIMELINE
 function renderStep4Timeline() {
-  timelineContainer.innerHTML = '';
+  if (!DOM.timelineContainer) return;
+  DOM.timelineContainer.innerHTML = '';
 
   if (!activeDoc.dates || activeDoc.dates.length === 0) {
-    timelineContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.9rem;">No timeline dates extracted.</div>';
+    DOM.timelineContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.9rem;">No timeline dates extracted.</div>';
     return;
   }
 
@@ -262,19 +279,18 @@ function renderStep4Timeline() {
         Clause Ref: <button class="citation-badge" onclick="navigateToCitation('${item.citation}')">[Source: ${item.citation}]</button>
       </div>
     `;
-    timelineContainer.appendChild(node);
+    DOM.timelineContainer.appendChild(node);
   });
 }
 
 // RENDER STEP 5: STAKEHOLDERS
 function renderStep5Stakeholders() {
-  stakeholdersGrid.innerHTML = '';
+  if (!DOM.stakeholdersGrid) return;
+  DOM.stakeholdersGrid.innerHTML = '';
 
   activeDoc.stakeholders.forEach(st => {
     const card = document.createElement('div');
     card.className = 'stakeholder-card';
-    
-    // First letter profile placeholder
     const firstLetter = st.name.charAt(0);
 
     card.innerHTML = `
@@ -288,13 +304,14 @@ function renderStep5Stakeholders() {
       <div class="st-responsibilities">${st.responsibilities}</div>
       <button class="citation-badge" onclick="navigateToCitation('${st.citation}')">[Source: ${st.citation}]</button>
     `;
-    stakeholdersGrid.appendChild(card);
+    DOM.stakeholdersGrid.appendChild(card);
   });
 }
 
 // RENDER STEP 6: DYNAMIC DOCUMENT VIEWER
 function renderDocumentViewer() {
-  docViewerBody.innerHTML = '';
+  if (!DOM.docViewerBody) return;
+  DOM.docViewerBody.innerHTML = '';
   
   activeDoc.chunks.forEach(c => {
     const block = document.createElement('div');
@@ -304,14 +321,12 @@ function renderDocumentViewer() {
       <div class="chunk-meta">Page ${c.page} • ${c.section}</div>
       <div class="chunk-text">${c.text}</div>
     `;
-    docViewerBody.appendChild(block);
+    DOM.docViewerBody.appendChild(block);
   });
 }
 
 // NAVIGATION CITATION BRIDGE: Highlights specific text segment inside viewer
 function navigateToCitation(citationStr) {
-  // Parse page and section references out of citations string
-  // Examples: "Page 4, Section 6.2", "Clause 14.1, Page 87", "[Source: Page 4, Section 6.2]"
   const citationClean = citationStr.replace(/[\[\]]/g, '');
   
   let pageNum = null;
@@ -328,20 +343,16 @@ function navigateToCitation(citationStr) {
   if (sectionMatch) {
     sectionName = `${sectionMatch[1]} ${sectionMatch[2]}`;
   } else {
-    // fallback look for preamble or general indicators
     if (citationClean.toLowerCase().includes('preamble')) sectionName = 'Preamble';
     else if (citationClean.toLowerCase().includes('recital')) sectionName = 'Recital';
   }
 
   if (pageNum) {
-    // Navigate viewer panel active state
     switchTab('viewer');
 
-    // Find corresponding chunk element
     const selector = `chunk-ref-${pageNum}-${(sectionName || '').toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-    
-    // Dynamic matching backup if exact section tag wasn't formatted cleanly
     let element = document.getElementById(selector);
+    
     if (!element) {
       const allChunks = document.querySelectorAll('.viewer-chunk');
       for (let ch of allChunks) {
@@ -353,25 +364,22 @@ function navigateToCitation(citationStr) {
     }
 
     if (element) {
-      // Scroll smoothly
       setTimeout(() => {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Glow Highlight Flash
         element.classList.remove('chunk-highlight');
         void element.offsetWidth; // trigger reflow
         element.classList.add('chunk-highlight');
       }, 100);
     }
   } else {
-    // If no page found, navigate to viewer index
     switchTab('viewer');
   }
 }
 
 // RAG CHAT CONTROLLER: Welcome parameters
 function renderWelcomeMessage() {
-  chatFeed.innerHTML = '';
+  if (!DOM.chatFeed) return;
+  DOM.chatFeed.innerHTML = '';
   
   const welcome = document.createElement('div');
   welcome.className = 'chat-msg msg-analyst';
@@ -382,13 +390,14 @@ function renderWelcomeMessage() {
       <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.35rem; font-style:italic;">All outputs are bound tightly to retrieved document chunks. Zero hallucinations permitted.</p>
     </div>
   `;
-  chatFeed.appendChild(welcome);
-  chatFeed.scrollTop = chatFeed.scrollHeight;
+  DOM.chatFeed.appendChild(welcome);
+  DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
 }
 
 // RAG CHAT CONTROLLER: Query chips
 function renderQueryChips() {
-  queryChipsWrapper.innerHTML = '';
+  if (!DOM.queryChipsWrapper) return;
+  DOM.queryChipsWrapper.innerHTML = '';
   
   if (activeDoc.qaPairs && activeDoc.qaPairs.length > 0) {
     activeDoc.qaPairs.forEach(pair => {
@@ -396,13 +405,14 @@ function renderQueryChips() {
       chip.className = 'chip-btn';
       chip.textContent = pair.question;
       chip.addEventListener('click', () => {
-        chatInput.value = pair.question;
-        chatForm.dispatchEvent(new Event('submit'));
+        if (DOM.chatInput) {
+          DOM.chatInput.value = pair.question;
+          DOM.chatForm.dispatchEvent(new Event('submit'));
+        }
       });
-      queryChipsWrapper.appendChild(chip);
+      DOM.queryChipsWrapper.appendChild(chip);
     });
   } else {
-    // Fallback standard inquiries for dynamically uploaded items
     const fallbacks = [
       "Who are the parties involved?",
       "What is the governing law of the contract?",
@@ -416,10 +426,12 @@ function renderQueryChips() {
       chip.className = 'chip-btn';
       chip.textContent = q;
       chip.addEventListener('click', () => {
-        chatInput.value = q;
-        chatForm.dispatchEvent(new Event('submit'));
+        if (DOM.chatInput) {
+          DOM.chatInput.value = q;
+          DOM.chatForm.dispatchEvent(new Event('submit'));
+        }
       });
-      queryChipsWrapper.appendChild(chip);
+      DOM.queryChipsWrapper.appendChild(chip);
     });
   }
 }
@@ -432,8 +444,9 @@ function clearChat() {
 // Send user query and fetch citation response
 function handleChatSubmit(event) {
   event.preventDefault();
-  const query = chatInput.value.trim();
+  if (!DOM.chatInput || !DOM.chatFeed) return;
   
+  const query = DOM.chatInput.value.trim();
   if (!query) return;
 
   // Render user prompt
@@ -445,11 +458,9 @@ function handleChatSubmit(event) {
       <p style="margin-top:0.25rem;">${query}</p>
     </div>
   `;
-  chatFeed.appendChild(userMsg);
-  chatInput.value = '';
-  
-  // Auto-scroll chat view
-  chatFeed.scrollTop = chatFeed.scrollHeight;
+  DOM.chatFeed.appendChild(userMsg);
+  DOM.chatInput.value = '';
+  DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
 
   // Process RAG engine answer
   setTimeout(() => {
@@ -460,10 +471,10 @@ function handleChatSubmit(event) {
 
 // Render formatted Analyst bubble with exact parameters
 function renderAnalystResponse(res) {
+  if (!DOM.chatFeed) return;
   const msg = document.createElement('div');
   msg.className = 'chat-msg msg-analyst';
   
-  // Build citations render block
   let citationsHtml = '';
   if (res.citations && res.citations.length > 0) {
     res.citations.forEach(c => {
@@ -471,7 +482,6 @@ function renderAnalystResponse(res) {
     });
   }
 
-  // Build quotes evidence block
   let evidenceHtml = '';
   if (res.evidence && res.evidence.length > 0) {
     evidenceHtml += `<div class="rag-section-title">Supporting Context Quotes</div>`;
@@ -480,19 +490,14 @@ function renderAnalystResponse(res) {
     });
   }
 
-  // Confidence pill coloring
   let confColor = 'var(--low-text)';
   if (res.confidence === 'High') confColor = 'var(--low-text)';
   else if (res.confidence === 'Medium') confColor = 'var(--med-text)';
   else if (res.confidence === 'Low') confColor = 'var(--crit-text)';
 
-  // RAG Inspector dynamic trigger ID
   const searchId = `retrievals_${Date.now()}`;
-  
-  // Hold retrieved chunks inside a window variable to link with sidebar drawer
   window[searchId] = res.retrievedChunks || engine.search(res.question || "contract parameters", 3);
 
-  // Compile final answer layout
   msg.innerHTML = `
     <div class="bubble">
       <strong>🤖 AI Legal Analyst:</strong>
@@ -532,17 +537,18 @@ function renderAnalystResponse(res) {
     </div>
   `;
 
-  chatFeed.appendChild(msg);
-  chatFeed.scrollTop = chatFeed.scrollHeight;
+  DOM.chatFeed.appendChild(msg);
+  DOM.chatFeed.scrollTop = DOM.chatFeed.scrollHeight;
 }
 
 // SLIDE DRAWER CONTROLLERS
 function openRAGInspector(searchId) {
-  inspectorChunksContainer.innerHTML = '';
+  if (!DOM.inspectorChunksContainer || !DOM.ragInspector) return;
+  DOM.inspectorChunksContainer.innerHTML = '';
   
   const retrieved = window[searchId];
   if (!retrieved || retrieved.length === 0) {
-    inspectorChunksContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.8rem;">No retrieval blocks available.</div>';
+    DOM.inspectorChunksContainer.innerHTML = '<div style="color:var(--text-secondary); text-align:center; font-size:0.8rem;">No retrieval blocks available.</div>';
   } else {
     retrieved.forEach((res, index) => {
       const card = document.createElement('div');
@@ -558,13 +564,15 @@ function openRAGInspector(searchId) {
         </div>
         <div class="chunk-card-text">“${chunk.text}”</div>
       `;
-      inspectorChunksContainer.appendChild(card);
+      DOM.inspectorChunksContainer.appendChild(card);
     });
   }
 
-  ragInspector.classList.add('open');
+  DOM.ragInspector.classList.add('open');
 }
 
 function closeRAGInspector() {
-  ragInspector.classList.remove('open');
+  if (DOM.ragInspector) {
+    DOM.ragInspector.classList.remove('open');
+  }
 }
