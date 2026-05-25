@@ -18,8 +18,10 @@ const server = http.createServer((req, res) => {
   let filePath = req.url === '/' ? '/index.html' : req.url;
   filePath = path.join(__dirname, decodeURIComponent(filePath));
 
-  // Verify file is within directory to prevent path traversal
-  if (!filePath.startsWith(__dirname)) {
+  // Verify file is within directory to prevent path traversal (Windows Case-Insensitive safe)
+  const normFilePath = path.normalize(filePath).toLowerCase();
+  const normDirName = path.normalize(__dirname).toLowerCase();
+  if (!normFilePath.startsWith(normDirName)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
     res.end('Access Denied');
     return;
