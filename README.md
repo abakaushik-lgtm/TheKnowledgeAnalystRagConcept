@@ -57,6 +57,84 @@ The system takes raw document inputs, automatically tokenizes and indexes them u
                                +-----------------------------+
 ```
 
+```
+
+---
+
+## 🏢 Enterprise Production RAG Architecture
+
+While this workspace features a high-fidelity client-side browser prototype (powered by local indices and TF-IDF models), it mirrors the identical topological steps of a **Production-Grade Enterprise Legal RAG Pipeline**. 
+
+The real-world scalable workflow utilizes the following components:
+
+```text
++-----------------------+      +-----------------------+      +-----------------------+
+|  Ingestion & Chunking | ---> | Dense Vector Embeds  | ---> |   Vector Database     |
+| (Recursive Splitter)  |      |  (text-embedding-3)   |      | (Pinecone / ChromaDB) |
++-----------------------+      +-----------------------+      +-----------------------+
+                                                                          |
+                                                                          v
++-----------------------+      +-----------------------+      +-----------------------+
+|   Generative LLM      | <--- |   Hybrid Retrieval    | <--- |   Semantic Search     |
+|  (Gemini 1.5 / GPT-4) |      | (BM25 + Dense Cosine) |      | (Metadata Filtering)  |
++-----------------------+      +-----------------------+      +-----------------------+
+            |
+            v
++-----------------------+
+| Citation Enforcement  |
+|  (Regex Verifier App) |
++-----------------------+
+```
+
+### 1. Document Ingestion & Chunking Strategy
+- **Recursive Character Splitter**: Long agreements are parsed using a recursive text splitter (e.g. from LlamaIndex or LangChain) that splits text sequentially on double newlines, single newlines, and space boundaries to keep logical clauses intact.
+- **Size & Overlap Parameters**: Production systems target a chunk size of `500 - 1000 tokens` with a `10% - 20% overlap` (e.g. `100 tokens`) to ensure legal clauses that cross token boundaries remain semantically linked.
+- **Rich Metadata Injection**: Every single chunk is tagged with structured, scalar attributes:
+  ```json
+  {
+    "document_hash": "a8f3b2...c09",
+    "page_number": 6,
+    "clause_id": "Section 9.2",
+    "section_title": "Limitation of Liability Cap"
+  }
+  ```
+
+### 2. Dense Vector Embeddings
+- **Semantic Capture**: Chunks are processed through state-of-the-art embedding models like **OpenAI `text-embedding-3-large`** (3072 dimensions) or **Google Vertex AI `text-multilingual-embedding-002`** to capture complex legal concepts (such as mapping "SLA downtime credits" conceptually to "liquidated damages liability").
+- **Embedding Store**: The raw embedding vectors represent coordinates in high-dimensional vector space, allowing mathematical cosine similarities to find conceptual overlaps.
+
+### 3. Vector Database Integration (FAISS, Chroma, Pinecone)
+- **Local Vectors (FAISS/Chroma)**: For offline testing or local data storage compliance, **ChromaDB** or **FAISS** index libraries are utilized.
+- **Cloud Vectors (Pinecone)**: For enterprise horizontal scaling, **Pinecone** is configured. 
+- **Metadata Filtering**: The vector database indexes metadata keys alongside vector matrices. When a user queries a specific contract, the DB performs a rapid metadata pre-filter (e.g., `where document_id == 'saas_msa'`) before conducting high-speed vector similarity searches.
+
+### 4. Hybrid Retrieval Pipeline
+- **Lexical BM25 Search**: Matches exact strings (like "Section 14.1" or "72 hours") which vector searches occasionally miss due to absolute mathematical semantic smoothing.
+- **Dense Vector Search**: Matches the overarching concept of the query (e.g., "how long do we have to report a leak?").
+- **Re-ranking (Rerank-3)**: The retrieved candidates from BM25 and vector search are merged using Reciprocal Rank Fusion (RRF) and scored through a re-ranking model like **Cohere Rerank v3** or **BGE-Reranker-Large** to yield the top-$k$ (e.g. $k=3$) most relevant paragraphs.
+
+### 5. Large Language Model (LLM) Selection
+- **Model Standard**: The system uses models with high logical deduction capabilities and large contexts like **Gemini 1.5 Pro** or **GPT-4o**.
+- **Hyperparameter Rules**: The LLM is configured with `temperature: 0.0` to disable structural stochastic creativity, eliminating hallucinations and ensuring the model acts strictly as a factual extraction summarizer.
+
+### 6. Citation Enforcement & Validation Logic
+- **Context Injection**: The LLM is fed a system prompt that structures the retrieved context explicitly:
+  ```text
+  You are a Legal Analyst. Here is the retrieved document context. 
+  Answer the user query strictly using the following sources:
+  === CHUNK ID: 14 | PAGE: 6 | SECTION: Section 9.2 ===
+  "Except for claims arising under Section 10..."
+  ```
+- **Structured Schema (JSON/Pydantic)**: The model is forced to output responses matching a Pydantic structure:
+  ```python
+  class LegalRAGResponse(BaseModel):
+      answer: str
+      evidence: List[str] # Must be verbatim quotes
+      citations: List[str] # E.g., ["Page 6, Section 9.2"]
+      confidence_score: Literal["High", "Medium", "Low"]
+  ```
+- **Post-Extraction Verifier**: A Python/JS middleware verifier automatically scans the output. It verifies that every sentence in `evidence` exists verbatim as a substring inside the retrieved context blocks. If any quote fails the verbatim match, the system rejects the output and re-queries the LLM, ensuring perfect factual accuracy.
+
 ---
 
 ## 🛠️ Technology Stack
