@@ -338,3 +338,25 @@ The document does not explicitly specify:
   - Pet policy for the offices
   - Rules regarding bringing animals to the provider or customer work facilities
 ```
+
+---
+
+## 🔮 Future Improvements Roadmap
+
+To expand the scope of this legal analytics workspace into a comprehensive, multi-tenant enterprise system, the following features are planned for future integration:
+
+### 1. Multi-Document Comparison
+- **Visual Differences Overlay**: Introduce a side-by-side split visual diff engine to compare two versions of an agreement (e.g., comparing a vendor-side proposal directly against a client-side standard template, or comparing SLA v1 vs v2).
+- **Modification tracking**: Automatically highlight newly added paragraphs (in green), removed conditions (in red), or modified clauses (in yellow) to isolate structural contract changes instantly.
+
+### 2. Deep Semantic Search
+- **Neural Embeddings Integration**: Supplement or replace lexical TF-IDF searches with transformer-based embeddings (using **Transformers.js** locally in the browser or cloud embeddings APIs).
+- **Synonym-Aware Matches**: Allow semantic searches to successfully retrieve passages when word stems do not align (e.g. matching a user's query for "outage penalties" directly to the target clause "SLA downtime credits" despite sharing zero exact word overlaps).
+
+### 3. Automated Compliance Scoring
+- **Audit Rulebook**: Establish a customizable grading rulebook matching enterprise risk appetites (such as strict liability cap floors, mandatory governing law jurisdictions, or strict CCPA/GDPR breach timelines).
+- **Scoring Analytics Grid**: Automatically grade newly ingested agreements, yielding a quantitative "Compliance Score" (0% - 100%) and summarizing exactly where the contract deviates from company standard guidelines.
+
+### 4. Clause Deviation Detection
+- **Playbook Cross-Referencing**: Automatically scan ingested agreements against pre-approved playbooks to identify modified terms (e.g., flagging that a standard "Governing Law" clause has been changed from "Delaware" to "New York", or a "Standard Indemnification" has been restricted).
+- **Alternative Text Suggestions**: Highlight exact structural deltas and suggest pre-approved, legally cleared alternative paragraphs for rapid contract markups and edits.
