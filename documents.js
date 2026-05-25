@@ -860,4 +860,6 @@ const PRELOADED_DOCUMENTS = [
 // If using ES modules in Node environments, export it. Otherwise, keep it global.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PRELOADED_DOCUMENTS };
+} else {
+  window.PRELOADED_DOCUMENTS = PRELOADED_DOCUMENTS;
 }
