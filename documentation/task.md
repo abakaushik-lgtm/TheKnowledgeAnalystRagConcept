@@ -1,0 +1,26 @@
+# AI Legal Knowledge Analyst - Task Tracker
+
+- `[x]` Step 1: Initialize Workspace and Create Preloaded Documents (`documents.js`)
+  - `[x]` Design rich sample text and metadata for SaaS Master Services Agreement
+  - `[x]` Design rich sample text and metadata for Mutual Non-Disclosure Agreement
+  - `[x]` Design rich sample text and metadata for Commercial Lease Agreement
+  - `[x]` Format documents with structured paragraphs, page numbers, clause IDs, risks, deadlines, and stakeholders
+- `[x]` Step 2: Implement Client-Side and CLI RAG Search Engine (`rag-engine.js` & `analyst-cli.js`)
+  - `[x]` Develop text parsing and chunking utility for custom text uploads/reads
+  - `[x]` Build search indexer and query-matching scoring algorithm (TF-IDF keyword overlap)
+  - `[x]` Write QA response resolver mapping queries to direct answers, quotes, and page citations
+  - `[x]` Implement Strict Rules (Rule 1, Rule 2, Rule 3) and output formats (Answer, Evidence, Citation, Confidence, Conflict, Missing)
+  - `[x]` Build a Node.js CLI tool (`analyst-cli.js`) that runs via terminal, parses local text/json files, and exports Step 1-5 JSON analysis or queries them in RAG mode
+- `[x]` Step 3: Create Visual Core (`index.html` and `style.css`)
+  - `[x]` Build HTML skeleton with premium responsive split panels (Uploads, Dashboards, Chat, Document Viewer)
+  - `[x]` Code core CSS design system: glassmorphism cards, glowing border gradients, customized scrolling, layout grids, animations, responsive layouts
+- `[x]` Step 4: Write UI Controller and Orchestrator (`app.js`)
+  - `[x]` Implement active document switching logic (preloaded vs custom)
+  - `[x]` Write code to render step-by-step pipeline tabs (Classification, Executive Summary, Risk, Timeline, Stakeholders)
+  - `[x]` Connect click event listener on citation badges to automatically scroll & highlight corresponding sections in Document Viewer
+  - `[x]` Construct interactive RAG chat controller, linking input forms, preset query chips, retrieved context side drawers, and scroll-to-bottom effects
+- `[x]` Step 5: Test, Verify and Polish
+  - `[x]` Validate responsive layouts across devices
+  - `[x]` Test custom text uploads and verify client-side chunk indexing and search retrieval
+  - `[x]` Verify Rule 1 (Hallucination prevention / Out of bounds questions) and Rule 2 (Citations)
+  - `[x]` Create Walkthrough documentation with validation results
